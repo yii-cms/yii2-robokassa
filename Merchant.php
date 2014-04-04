@@ -38,7 +38,7 @@ class Merchant extends Object
         if (!empty($shp) && ($query = http_build_query($shp)) !== '') {
             $url .= '&' . $query;
         }
-        \Yii::$app->response->redirect($url);
+        return \Yii::$app->response->redirect($url);
     }
 
     private function implodeShp($shp)

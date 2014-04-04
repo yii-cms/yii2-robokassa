@@ -23,26 +23,26 @@ class PaymentController extends Controller
     {
         return [
             'result' => [
-                'class' => 'robokassa\SuccessAction',
+                'class' => '\robokassa\SuccessAction',
                 'successCallback' => [$this, 'resultCallback'],
             ],
             'success' => [
-                'class' => 'robokassa\SuccessAction',
+                'class' => '\robokassa\SuccessAction',
                 'successCallback' => [$this, 'successCallback'],
             ],
             'fail' => [
-                'class' => 'robokassa\FailAction',
+                'class' => '\robokassa\FailAction',
                 'successCallback' => [$this, 'failCallback'],
             ],
-        ]
+        ];
     }
 
 	/**
 	 * Callback.
-     * @param robokassa\Merchant $merchant merchant.
-     * @param $nInvId invoice ID.
-     * @param $nOutSum sum.
-     * @param $shp user attributes.
+     * @param \robokassa\Merchant $merchant merchant.
+     * @param integer $nInvId invoice ID.
+     * @param float $nOutSum sum.
+     * @param array $shp user attributes.
 	 */
     public function successCallback($merchant, $nInvId, $nOutSum, $shp)
     {
