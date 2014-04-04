@@ -24,15 +24,15 @@ class PaymentController extends Controller
         return [
             'result' => [
                 'class' => '\robokassa\SuccessAction',
-                'successCallback' => [$this, 'resultCallback'],
+                'callback' => [$this, 'resultCallback'],
             ],
             'success' => [
                 'class' => '\robokassa\SuccessAction',
-                'successCallback' => [$this, 'successCallback'],
+                'callback' => [$this, 'successCallback'],
             ],
             'fail' => [
                 'class' => '\robokassa\FailAction',
-                'successCallback' => [$this, 'failCallback'],
+                'callback' => [$this, 'failCallback'],
             ],
         ];
     }
