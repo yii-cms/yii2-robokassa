@@ -2,7 +2,7 @@
 
 namespace robokassa;
 
-
+use Yii;
 use yii\base\Object;
 
 class Merchant extends Object
@@ -38,7 +38,9 @@ class Merchant extends Object
         if (!empty($shp) && ($query = http_build_query($shp)) !== '') {
             $url .= '&' . $query;
         }
-        return \Yii::$app->response->redirect($url);
+
+        Yii::$app->user->setReturnUrl(Yii::$app->request->getUrl());
+        return Yii::$app->response->redirect($url);
     }
 
     private function implodeShp($shp)
