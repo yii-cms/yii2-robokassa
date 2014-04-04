@@ -1,3 +1,6 @@
+yii2-robokassa
+==============
+
 ```php
 'components' => [
     'robokassa' => [
