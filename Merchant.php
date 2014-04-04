@@ -47,9 +47,9 @@ class Merchant extends Object
         return implode(':', $shp);
     }
 
-    public  function checkSignature($sSignatureValue, $nOutSum, $nInvId, $shp)
+    public  function checkSignature($sSignatureValue, $nOutSum, $nInvId, $sMerchantPass, $shp)
     {
-        $signature = "{$nOutSum}:{$nInvId}:{$this->sMerchantPass2}";
+        $signature = "{$nOutSum}:{$nInvId}:{$sMerchantPass}";
         if (!empty($shp)) {
             $signature .= ':' . $this->implodeShp($shp);
         }

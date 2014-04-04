@@ -6,7 +6,7 @@ use Yii;
 use yii\web\BadRequestHttpException;
 
 
-class SuccessAction extends BaseAction {
+class ResultAction extends BaseAction {
     /**
      * Runs the action.
      */
@@ -26,7 +26,7 @@ class SuccessAction extends BaseAction {
             }
         }
 
-        if ($merchant->checkSignature($_REQUEST['SignatureValue'], $_REQUEST['OutSum'], $_REQUEST['InvId'], $merchant->sMerchantPass1, $shp)) {
+        if ($merchant->checkSignature($_REQUEST['SignatureValue'], $_REQUEST['OutSum'], $_REQUEST['InvId'], $merchant->sMerchantPass2, $shp)) {
             return $this->callback($merchant, $_REQUEST['InvId'], $_REQUEST['OutSum'], $shp);
         }
 
