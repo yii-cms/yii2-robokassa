@@ -46,6 +46,10 @@ class Merchant extends Object
     private function implodeShp($shp)
     {
         ksort($shp);
+        foreach($shp as $key => $value) {
+            $shp[$key] = $key . '=' . $value;
+        }
+
         return implode(':', $shp);
     }
 
