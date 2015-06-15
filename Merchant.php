@@ -12,11 +12,15 @@ class Merchant extends Object
     public $sMerchantPass1;
     public $sMerchantPass2;
 
-    public $baseUrl = 'https://auth.robokassa.ru/Merchant/Index.aspx';
+	public $test;
+
+	public $baseUrl = 'https://auth.robokassa.ru/Merchant/Index.aspx';
+	
+	public $testUrl = 'http://test.robokassa.ru/Index.aspx';
 
     public function payment($nOutSum, $nInvId, $sInvDesc = null, $sIncCurrLabel=null, $sEmail = null, $sCulture = null, $shp = [])
     {
-        $url = $this->baseUrl;
+        $url = $this->test ? $this->testUrl : $this->baseUrl;
 
         $signature = "{$this->sMerchantLogin}:{$nOutSum}:{$nInvId}:{$this->sMerchantPass1}";
         if (!empty($shp)) {
