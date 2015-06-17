@@ -5,6 +5,7 @@ yii2-robokassa
 'components' => [
     'robokassa' => [
         'class' => '\robokassa\Merchant',
+        'baseUrl' => YII_ENV_PROD ? 'https://auth.robokassa.ru/Merchant/Index.aspx' : 'http://test.robokassa.ru/Index.aspx',
         'sMerchantLogin' => '',
         'sMerchantPass1' => '',
         'sMerchantPass2' => '',
