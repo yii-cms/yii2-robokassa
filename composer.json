@@ -1,5 +1,5 @@
 {
-    "name": "gonimar/yii2-robokassa",
+    "name": "yii-cms/yii2-robokassa",
     "description": "Robokassa payment extension.",
     "keywords": ["yii2", "robokassa"],
     "type": "yii2-extension",
