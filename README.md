@@ -1,6 +1,14 @@
 yii2-robokassa
 ==============
 
+## Install via Composer
+
+~~~
+composer require yii-cms/yii2-robokassa
+~~~
+
+## Configuration
+
 ```php
 'components' => [
     'robokassa' => [
@@ -13,6 +21,8 @@ yii2-robokassa
     ...
 ]
 ```
+
+## Example
 
 ```php
 class PaymentController extends Controller
