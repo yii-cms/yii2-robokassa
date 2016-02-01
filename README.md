@@ -77,7 +77,7 @@ class PaymentController extends Controller
     public function resultCallback($merchant, $nInvId, $nOutSum, $shp)
     {
         $this->loadModel($nInvId)->updateAttributes(['status' => Invoice::STATUS_SUCCESS]);
-        return 'Ok';
+        return 'OK' . $nInvId;
     }
     public function failCallback($merchant, $nInvId, $nOutSum, $shp)
     {
