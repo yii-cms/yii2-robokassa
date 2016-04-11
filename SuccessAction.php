@@ -26,7 +26,7 @@ class SuccessAction extends BaseAction {
             }
         }
 
-        if ($merchant->checkSignature($_REQUEST['SignatureValue'], $_REQUEST['OutSum'], $_REQUEST['InvId'], $merchant->sMerchantPass1, $shp)) {
+        if ($merchant->checkSignature($_REQUEST['SignatureValue'], $_REQUEST['OutSum'], $_REQUEST['InvId'], $merchant->passwords['sMerchantPass1'], $shp)) {
             return $this->callback($merchant, $_REQUEST['InvId'], $_REQUEST['OutSum'], $shp);
         }
 
