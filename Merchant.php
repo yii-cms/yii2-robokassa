@@ -9,8 +9,8 @@ class Merchant extends Object
 {
     public $sMerchantLogin;
 
-    public $sMerchantPass1;
-    public $sMerchantPass2;
+    public $passwords;
+    public $isTest = 0;
 
     public $baseUrl = 'https://auth.robokassa.ru/Merchant/Index.aspx';
 
@@ -18,7 +18,7 @@ class Merchant extends Object
     {
         $url = $this->baseUrl;
 
-        $signature = "{$this->sMerchantLogin}:{$nOutSum}:{$nInvId}:{$this->sMerchantPass1}";
+        $signature = "{$this->sMerchantLogin}:{$nOutSum}:{$nInvId}:{$this->passwords['sMerchantPass1']}";
         if (!empty($shp)) {
             $signature .= ':' . $this->implodeShp($shp);
         }
@@ -33,6 +33,7 @@ class Merchant extends Object
             'IncCurrLabel' => $sIncCurrLabel,
             'Email' => $sEmail,
             'Culture' => $sCulture,
+            'isTest' => $this->isTest,
         ]);
 
         if (!empty($shp) && ($query = http_build_query($shp)) !== '') {
