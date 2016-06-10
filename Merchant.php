@@ -14,7 +14,7 @@ class Merchant extends Object
 
     public $baseUrl = 'https://auth.robokassa.ru/Merchant/Index.aspx';
 
-    public function payment($nOutSum, $nInvId, $sInvDesc = null, $sIncCurrLabel=null, $sEmail = null, $sCulture = null, $shp = [])
+    public function payment($nOutSum, $nInvId, $sInvDesc = null, $sIncCurrLabel=null, $sEmail = null, $sCulture = null, $shp = [], $returnLink = false)
     {
         $url = $this->baseUrl;
 
@@ -38,9 +38,13 @@ class Merchant extends Object
         if (!empty($shp) && ($query = http_build_query($shp)) !== '') {
             $url .= '&' . $query;
         }
-
-        Yii::$app->user->setReturnUrl(Yii::$app->request->getUrl());
-        return Yii::$app->response->redirect($url);
+        
+        if ( !$returnLink ){
+            Yii::$app->user->setReturnUrl(Yii::$app->request->getUrl());
+            return Yii::$app->response->redirect($url);
+        } else {
+            return $url;
+        }
     }
 
     private function implodeShp($shp)
