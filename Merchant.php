@@ -12,6 +12,8 @@ class Merchant extends Object
     public $sMerchantPass1;
     public $sMerchantPass2;
 
+    public $isTest = false;
+
     public $baseUrl = 'https://auth.robokassa.ru/Merchant/Index.aspx';
 
     public function payment($nOutSum, $nInvId, $sInvDesc = null, $sIncCurrLabel=null, $sEmail = null, $sCulture = null, $shp = [], $returnLink = false)
@@ -33,6 +35,7 @@ class Merchant extends Object
             'IncCurrLabel' => $sIncCurrLabel,
             'Email' => $sEmail,
             'Culture' => $sCulture,
+            'IsTest' => (int)$this->isTest,
         ]);
 
         if (!empty($shp) && ($query = http_build_query($shp)) !== '') {
