@@ -15,6 +15,8 @@ class Merchant extends Object
     public $isTest = false;
 
     public $baseUrl = 'https://auth.robokassa.ru/Merchant/Index.aspx';
+    
+    public $hashAlgo = 'md5';
 
     public function payment($nOutSum, $nInvId, $sInvDesc = null, $sIncCurrLabel=null, $sEmail = null, $sCulture = null, $shp = [], $returnLink = false)
     {
@@ -24,7 +26,7 @@ class Merchant extends Object
         if (!empty($shp)) {
             $signature .= ':' . $this->implodeShp($shp);
         }
-        $sSignatureValue = md5($signature);
+        $sSignatureValue = $this->encryptSignature($signature);
 
         $url .= '?' . http_build_query([
             'MrchLogin' => $this->sMerchantLogin,
@@ -66,7 +68,12 @@ class Merchant extends Object
         if (!empty($shp)) {
             $signature .= ':' . $this->implodeShp($shp);
         }
-        return strtolower(md5($signature)) === strtolower($sSignatureValue);
+        return strtolower($this->encryptSignature($signature)) === strtolower($sSignatureValue);
 
+    }
+    
+    private function encryptSignature($signature)
+    {
+        return hash($this->hashAlgo, $signature);
     }
 } 
