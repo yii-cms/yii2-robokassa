@@ -3,9 +3,9 @@
 namespace robokassa;
 
 use Yii;
-use yii\base\Object;
+use yii\base\BaseObject;
 
-class Merchant extends Object
+class Merchant extends BaseObject
 {
     public $sMerchantLogin;
 
