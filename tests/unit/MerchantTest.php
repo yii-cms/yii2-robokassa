@@ -37,7 +37,11 @@ class MerchantTest extends TestCase
 
         $signature = md5('100:1:pass1'); // '1e8f0be69238c13020beba0206951535'
 
-        $this->assertTrue($merchant->checkSignature($signature, 100, 1, 'pass1', []));
+        $check = $merchant->checkSignature($signature, 100, 1, 'pass1');
+
+        $this->assertInternalType('boolean', $check);
+
+        $this->assertTrue($check);
     }
 
     public function testSignatureUserParams()
@@ -72,5 +76,19 @@ class MerchantTest extends TestCase
             'shp_id' => 1,
             'shp_login' => 'user1',
         ]));
+    }
+
+    public function testSignatureAlgo()
+    {
+        $merchant = new Merchant([
+            'sMerchantLogin' => 'demo',
+            'sMerchantPass1' => 'password_1',
+            'hashAlgo' => 'sha256', // <=== 'sha256'
+            'isTest' => true,
+        ]);
+
+        $signature = hash('sha256', '100:1:pass1');
+
+        $this->assertTrue($merchant->checkSignature($signature, 100, 1, 'pass1'));
     }
 }

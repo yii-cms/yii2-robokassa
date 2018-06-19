@@ -65,7 +65,7 @@ class Merchant extends BaseObject
         return implode(':', $shp);
     }
 
-    public function checkSignature($sSignatureValue, $nOutSum, $nInvId, $sMerchantPass, $shp)
+    public function checkSignature($sSignatureValue, $nOutSum, $nInvId, $sMerchantPass, $shp = [])
     {
         $signature = "{$nOutSum}:{$nInvId}:{$sMerchantPass}";
 
