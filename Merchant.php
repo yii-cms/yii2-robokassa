@@ -3,9 +3,9 @@
 namespace robokassa;
 
 use Yii;
-use yii\base\Object;
+use yii\base\BaseObject;
 
-class Merchant extends Object
+class Merchant extends BaseObject
 {
     public $sMerchantLogin;
 
@@ -23,9 +23,11 @@ class Merchant extends Object
         $url = $this->baseUrl;
 
         $signature = "{$this->sMerchantLogin}:{$nOutSum}:{$nInvId}:{$this->sMerchantPass1}";
+
         if (!empty($shp)) {
             $signature .= ':' . $this->implodeShp($shp);
         }
+
         $sSignatureValue = $this->encryptSignature($signature);
 
         $url .= '?' . http_build_query([
@@ -37,7 +39,7 @@ class Merchant extends Object
             'IncCurrLabel' => $sIncCurrLabel,
             'Email' => $sEmail,
             'Culture' => $sCulture,
-            'IsTest' => (int)$this->isTest,
+            'IsTest' => $this->isTest ? 1 : null,
         ]);
 
         if (!empty($shp) && ($query = http_build_query($shp)) !== '') {
@@ -55,6 +57,7 @@ class Merchant extends Object
     private function implodeShp($shp)
     {
         ksort($shp);
+
         foreach($shp as $key => $value) {
             $shp[$key] = $key . '=' . $value;
         }
@@ -62,17 +65,19 @@ class Merchant extends Object
         return implode(':', $shp);
     }
 
-    public  function checkSignature($sSignatureValue, $nOutSum, $nInvId, $sMerchantPass, $shp)
+    public function checkSignature($sSignatureValue, $nOutSum, $nInvId, $sMerchantPass, $shp = [])
     {
         $signature = "{$nOutSum}:{$nInvId}:{$sMerchantPass}";
+
         if (!empty($shp)) {
             $signature .= ':' . $this->implodeShp($shp);
         }
+
         return strtolower($this->encryptSignature($signature)) === strtolower($sSignatureValue);
 
     }
     
-    private function encryptSignature($signature)
+    protected function encryptSignature($signature)
     {
         return hash($this->hashAlgo, $signature);
     }

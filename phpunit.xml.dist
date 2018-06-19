@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phpunit bootstrap="./tests/bootstrap.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         stopOnFailure="false">
+    <testsuites>
+        <testsuite name="Yii2 Robokassa Test Suite">
+            <directory>./tests/unit</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">.</directory>
+            <exclude>
+                <directory suffix=".php">vendor</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

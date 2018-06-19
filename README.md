@@ -1,6 +1,11 @@
 yii2-robokassa
 ==============
 
+[![Latest Stable Version](https://poser.pugx.org/yii-cms/yii2-robokassa/v/stable.png)](https://packagist.org/packages/yii-cms/yii2-robokassa)
+[![Total Downloads](https://poser.pugx.org/yii-cms/yii2-robokassa/downloads.png)](https://packagist.org/packages/yii-cms/yii2-robokassa)
+[![Build Status](https://travis-ci.org/yii-cms/yii2-robokassa.svg?branch=master)](https://travis-ci.org/yii-cms/yii2-robokassa)
+
+
 ## Install via Composer
 
 ~~~
