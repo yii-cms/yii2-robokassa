@@ -24,6 +24,9 @@ script:
 
 after_script:
   - bash <(curl -s https://codecov.io/bash)
+  - export CI_BUILD_NUMBER="$TRAVIS_BUILD_NUMBER"
+  - export CI_PULL_REQUEST="$TRAVIS_PULL_REQUEST"
+  - export CI_BRANCH="$TRAVIS_BRANCH"
   - travis_retry php vendor/bin/php-coveralls -v --coverage_clover clover.xml --json_path coveralls-upload.json
   - |
     if [ $TRAVIS_PHP_VERSION = '5.6' ]; then
