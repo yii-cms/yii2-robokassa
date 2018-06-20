@@ -1,5 +1,5 @@
 <?php
-namespace robokassa\tests\unit;
+namespace robokassa\tests;
 
 use yii\di\Container;
 use yii\helpers\ArrayHelper;
@@ -47,13 +47,25 @@ class TestCase extends \PHPUnit\Framework\TestCase
                     'cookieValidationKey' => 'test',
                     'scriptFile' => __DIR__ .'/index.php',
                     'scriptUrl' => '/index.php',
+                    'url' => '/',
+                ],
+                'assetManager' => [
+                    'bundles' => [
+                        // отрубаем публикацию ассетов
+                        'yii\grid\GridViewAsset' => false,
+                        'yii\web\JqueryAsset' => false,
+                    ],
+                ],
+                'user' => [
+                    'identityClass' => '\\tests\\User',
+                    'enableSession' => false,
                 ],
                 'robokassa' => [
                     'class' => '\robokassa\Merchant',
                     'baseUrl' => 'https://auth.robokassa.ru/Merchant/Index.aspx',
                     'sMerchantLogin' => 'demo',
-                    'sMerchantPass1' => 'test1TEST',
-                    'sMerchantPass2' => 'test2TEST',
+                    'sMerchantPass1' => '',
+                    'sMerchantPass2' => '',
                     'isTest' => true,
                 ],
             ]

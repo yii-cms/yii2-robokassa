@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <phpunit bootstrap="./tests/bootstrap.php"
+         backupGlobals="true"
          colors="true"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
@@ -15,6 +16,7 @@
             <directory suffix=".php">.</directory>
             <exclude>
                 <directory suffix=".php">vendor</directory>
+                <directory suffix=".php">tests</directory>
             </exclude>
         </whitelist>
     </filter>

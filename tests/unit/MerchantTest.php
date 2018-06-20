@@ -1,10 +1,17 @@
 <?php
+
 namespace robokassa\tests\unit;
 
 use robokassa\Merchant;
+use robokassa\tests\TestCase;
+use yii\web\Response;
 
 class MerchantTest extends TestCase
 {
+    protected function setUp()
+    {
+    }
+
     public function testRedirectUrl()
     {
         $merchant = new Merchant([
@@ -24,6 +31,48 @@ class MerchantTest extends TestCase
         $returnUrl = $merchant->payment(100, 1, 'Description', null, null, 'en', [], true);
 
         $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&InvId=1&Desc=Description&SignatureValue=8a50b8d86ed28921edfc371cff6e156f&Culture=en", $returnUrl);
+    }
+
+    public function testRedirectUrlUserParams()
+    {
+        $merchant = new Merchant([
+            'sMerchantLogin' => 'demo',
+            'sMerchantPass1' => 'password_1',
+            'hashAlgo' => 'md5',
+            'isTest' => true,
+        ]);
+
+        $userParams = [
+            'shp_id' => 1,
+            'shp_login' => 'user1',
+        ];
+
+        $returnUrl = $merchant->payment(100, 1, 'Description', null, null, 'en', $userParams, true);
+
+        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&InvId=1&Desc=Description&SignatureValue=938bb1d15a177ced68d59c1ca7dae32a&Culture=en&IsTest=1&shp_id=1&shp_login=user1", $returnUrl);
+    }
+
+    public function testResponseRedirect()
+    {
+        $this->mockWebApplication();
+
+        $merchant = new Merchant([
+            'sMerchantLogin' => 'demo',
+            'sMerchantPass1' => 'password_1',
+            'hashAlgo' => 'md5',
+            'isTest' => true,
+        ]);
+
+        // https://github.com/yiisoft/yii2/issues/15682
+        $userStub = $this->createMock('yii\\web\\User');
+        $userStub->method('setReturnUrl')->willReturn(false);
+        \Yii::$app->set('user', $userStub);
+
+        /** @var Response $response */
+        $response = $merchant->payment(100, 1, 'Description', null, null, 'en', [], false);
+
+        $this->assertInstanceOf(Response::className(), $response);
+        $this->assertEquals('https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&InvId=1&Desc=Description&SignatureValue=8a50b8d86ed28921edfc371cff6e156f&Culture=en&IsTest=1', $response->getHeaders()->get('Location'));
     }
 
     public function testSignature()
