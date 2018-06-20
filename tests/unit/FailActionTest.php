@@ -66,6 +66,28 @@ class FailActionTest extends TestCase
         $this->assertEquals([1, 100, []], $return);
     }
 
+    public function testBadRequest()
+    {
+        $this->mockWebApplication();
+
+        $merchant = new Merchant([
+            'sMerchantLogin' => 'demo',
+            'sMerchantPass1' => 'password_1',
+            'hashAlgo' => 'md5',
+            'isTest' => true,
+        ]);
+
+        Yii::$app->set('robokassa', $merchant);
+
+        $controller = new Controller('merchant', Yii::$app);
+
+        $action = new FailAction('success', $controller);
+
+        $this->expectException('yii\\web\\BadRequestHttpException');
+
+        $action->run();
+    }
+
     public function testSuccessParams()
     {
         $this->mockWebApplication();
