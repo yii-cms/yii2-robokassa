@@ -22,16 +22,34 @@ class MerchantTest extends TestCase
             'isTest' => true,
         ]);
 
+        $signatureHash = md5('demo:100:1:password_1');
+
         $returnUrl = $merchant->payment(100, 1, 'Description', null, null, 'en', [], true);
 
-        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&InvId=1&Desc=Description&SignatureValue=8a50b8d86ed28921edfc371cff6e156f&Culture=en&IsTest=1", $returnUrl);
+        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&InvId=1&Desc=Description&SignatureValue={$signatureHash}&Culture=en&IsTest=1", $returnUrl);
 
         // disable test
         $merchant->isTest = false;
 
         $returnUrl = $merchant->payment(100, 1, 'Description', null, null, 'en', [], true);
 
-        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&InvId=1&Desc=Description&SignatureValue=8a50b8d86ed28921edfc371cff6e156f&Culture=en", $returnUrl);
+        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&InvId=1&Desc=Description&SignatureValue={$signatureHash}&Culture=en", $returnUrl);
+    }
+
+    public function testRedirectUrlNoInvId()
+    {
+        $merchant = new Merchant([
+            'sMerchantLogin' => 'demo',
+            'sMerchantPass1' => 'password_1',
+            'hashAlgo' => 'md5',
+            'isTest' => true,
+        ]);
+
+        $returnUrl = $merchant->payment(100, null, 'Description', null, null, 'en', [], true);
+
+        $signatureHash = md5('demo:100:password_1');
+
+        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&Desc=Description&SignatureValue={$signatureHash}&Culture=en&IsTest=1", $returnUrl);
     }
 
     public function testRedirectUrlUserParams()
