@@ -1,31 +1,36 @@
 {
-    "name": "yii-cms/yii2-robokassa",
-    "description": "Robokassa payment extension.",
-    "keywords": ["yii2", "robokassa"],
-    "type": "yii2-extension",
-    "license": "BSD-3-Clause",
-    "authors": [
-        {
-            "name": "Sergey Gonimar",
-            "email": "sergey.gonimar@gmail.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {
-        "yiisoft/yii2": "~2.0.13"
-    },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        }
-    ],
-    "autoload": {
-        "psr-4": { "robokassa\\": "" }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.2.x-dev"
-        }
+  "name": "yii-cms/yii2-robokassa",
+  "description": "Robokassa payment extension.",
+  "keywords": [
+    "yii2",
+    "robokassa"
+  ],
+  "type": "yii2-extension",
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Sergey Gonimar",
+      "email": "sergey.gonimar@gmail.com"
     }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+    "yiisoft/yii2": "~2.0.14"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "robokassa\\": ""
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.2.x-dev"
+    }
+  }
 }

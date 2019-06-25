@@ -2,22 +2,26 @@
 
 namespace robokassa;
 
-
 use yii\base\Action;
 use yii\base\InvalidConfigException;
 
-class BaseAction extends Action {
+/**
+ * Class BaseAction
+ * @package robokassa
+ */
+class BaseAction extends Action
+{
     public $merchant = 'robokassa';
 
     public $callback;
 
     /**
      * @param Merchant $merchant Merchant.
-     * @param $nInvId
-     * @param $nOutSum
-     * @param $shp
+     * @param mixed $nInvId
+     * @param mixed $nOutSum
+     * @param array $shp
      * @return mixed
-     * @throws \yii\base\InvalidConfigException
+     * @throws InvalidConfigException
      */
     protected function callback($merchant, $nInvId, $nOutSum, $shp)
     {
