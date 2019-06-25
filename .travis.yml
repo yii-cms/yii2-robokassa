@@ -20,7 +20,7 @@ install:
   - travis_retry composer require php-coveralls/php-coveralls
 
 script:
-  - phpunit --verbose $PHPUNIT_FLAGS
+  - vendor/bin/phpunit --verbose $PHPUNIT_FLAGS
 
 after_script:
   - bash <(curl -s https://codecov.io/bash)
