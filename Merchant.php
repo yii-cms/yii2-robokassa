@@ -24,10 +24,6 @@ class Merchant extends BaseObject
 
         $signature = "{$this->sMerchantLogin}:{$nOutSum}:{$nInvId}:{$this->sMerchantPass1}";
 
-        if (!empty($shp)) {
-            $signature .= ':' . $this->implodeShp($shp);
-        }
-
         $sSignatureValue = $this->encryptSignature($signature);
 
         $url .= '?' . http_build_query([
