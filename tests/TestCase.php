@@ -1,4 +1,5 @@
 <?php
+
 namespace robokassa\tests;
 
 use yii\di\Container;
@@ -45,7 +46,7 @@ class TestCase extends \PHPUnit\Framework\TestCase
             'components' => [
                 'request' => [
                     'cookieValidationKey' => 'test',
-                    'scriptFile' => __DIR__ .'/index.php',
+                    'scriptFile' => __DIR__ . '/index.php',
                     'scriptUrl' => '/index.php',
                     'url' => '/',
                 ],

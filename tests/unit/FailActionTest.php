@@ -26,7 +26,9 @@ class FailActionTest extends TestCase
         $controller = new Controller('merchant', Yii::$app);
 
         $action = new FailAction('success', $controller, [
-            'callback' => function ($merchant, $nInvId, $nOutSum, $shp) { return 'SUCCESS'; }
+            'callback' => function ($merchant, $nInvId, $nOutSum, $shp) {
+                return 'SUCCESS';
+            }
         ]);
 
         $_REQUEST['OutSum'] = 100;
@@ -54,7 +56,9 @@ class FailActionTest extends TestCase
         $controller = new Controller('merchant', Yii::$app);
 
         $action = new FailAction('success', $controller, [
-            'callback' => function ($merchant, $nInvId, $nOutSum, $shp) { return [$nInvId, $nOutSum, $shp]; }
+            'callback' => function ($merchant, $nInvId, $nOutSum, $shp) {
+                return [$nInvId, $nOutSum, $shp];
+            }
         ]);
 
         $_REQUEST['OutSum'] = 100;
@@ -95,7 +99,9 @@ class FailActionTest extends TestCase
         $controller = new Controller('merchant', Yii::$app);
 
         $action = new FailAction('success', $controller, [
-            'callback' => function ($merchant, $nInvId, $nOutSum, $shp) { return "{$nInvId}:{$nOutSum}"; }
+            'callback' => function ($merchant, $nInvId, $nOutSum, $shp) {
+                return "{$nInvId}:{$nOutSum}";
+            }
         ]);
 
         $_REQUEST['OutSum'] = 100;
@@ -113,7 +119,9 @@ class FailActionTest extends TestCase
         $controller = new Controller('merchant', Yii::$app);
 
         $action = new FailAction('success', $controller, [
-            'callback' => function ($merchant, $nInvId, $nOutSum, $shp) { return ["{$nInvId}:{$nOutSum}", $shp]; }
+            'callback' => function ($merchant, $nInvId, $nOutSum, $shp) {
+                return ["{$nInvId}:{$nOutSum}", $shp];
+            }
         ]);
 
         $_REQUEST['OutSum'] = 100;

@@ -3,13 +3,20 @@
 namespace robokassa;
 
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 
-
-class FailAction extends BaseAction {
+/**
+ * Class FailAction
+ * @package robokassa
+ */
+class FailAction extends BaseAction
+{
 
     /**
      * Runs the action.
+     * @throws BadRequestHttpException
+     * @throws InvalidConfigException
      */
     public function run()
     {
@@ -17,7 +24,7 @@ class FailAction extends BaseAction {
             throw new BadRequestHttpException;
         }
 
-        /** @var \robokassa\Merchant $merchant */
+        /** @var Merchant $merchant */
         $merchant = Yii::$app->get($this->merchant);
 
         $shp = [];

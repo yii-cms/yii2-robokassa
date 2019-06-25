@@ -3,12 +3,19 @@
 namespace robokassa;
 
 use Yii;
+use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 
-
-class SuccessAction extends BaseAction {
+/**
+ * Class SuccessAction
+ * @package robokassa
+ */
+class SuccessAction extends BaseAction
+{
     /**
      * Runs the action.
+     * @throws InvalidConfigException
+     * @throws BadRequestHttpException
      */
     public function run()
     {
@@ -16,7 +23,7 @@ class SuccessAction extends BaseAction {
             throw new BadRequestHttpException;
         }
 
-        /** @var \robokassa\Merchant $merchant */
+        /** @var Merchant $merchant */
         $merchant = Yii::$app->get($this->merchant);
 
         $shp = [];
@@ -26,7 +33,13 @@ class SuccessAction extends BaseAction {
             }
         }
 
-        if ($merchant->checkSignature($_REQUEST['SignatureValue'], $_REQUEST['OutSum'], $_REQUEST['InvId'], $merchant->sMerchantPass1, $shp)) {
+        if ($merchant->checkSignature(
+            $_REQUEST['SignatureValue'],
+            $_REQUEST['OutSum'],
+            $_REQUEST['InvId'],
+            $merchant->sMerchantPass1,
+            $shp)
+        ) {
             return $this->callback($merchant, $_REQUEST['InvId'], $_REQUEST['OutSum'], $shp);
         }
 
