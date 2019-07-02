@@ -39,7 +39,7 @@ class Merchant extends BaseObject
     {
         $url = $this->baseUrl;
 
-        $sSignatureValue = $this->generateSignature($nOutSum, $nInvId);
+        $sSignatureValue = $this->generateSignature($nOutSum, $nInvId, $shp);
 
         $url .= '?' . http_build_query([
                 'MrchLogin' => $this->sMerchantLogin,
@@ -80,7 +80,7 @@ class Merchant extends BaseObject
         return implode(':', $shp);
     }
 
-    private function generateSignature($nOutSum, $nInvId)
+    private function generateSignature($nOutSum, $nInvId, $shp = [])
     {
         if ($nInvId === null) {
             // MerchantLogin:OutSum:Пароль#1
@@ -88,6 +88,10 @@ class Merchant extends BaseObject
         } else {
             // MerchantLogin:OutSum:InvId:Пароль#1
             $signature = "{$this->sMerchantLogin}:{$nOutSum}:{$nInvId}:{$this->sMerchantPass1}";
+        }
+
+        if (!empty($shp)) {
+            $signature .= ':' . $this->implodeShp($shp);
         }
 
         return strtolower($this->encryptSignature($signature));
