@@ -67,9 +67,11 @@ class MerchantTest extends TestCase
             'shp_login' => 'user1',
         ];
 
+        $signatureHash = md5('demo:100:password_1:shp_id=1:shp_login=user1');
+
         $returnUrl = $merchant->payment(100, 1, 'Description', null, null, 'en', $userParams, true);
 
-        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&InvId=1&Desc=Description&SignatureValue=8a50b8d86ed28921edfc371cff6e156f&Culture=en&IsTest=1&shp_id=1&shp_login=user1", $returnUrl);
+        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&InvId=1&Desc=Description&SignatureValue={$signatureHash}&Culture=en&IsTest=1&shp_id=1&shp_login=user1", $returnUrl);
     }
 
     public function testResponseRedirect()
