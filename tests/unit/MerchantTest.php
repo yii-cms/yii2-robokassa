@@ -67,7 +67,7 @@ class MerchantTest extends TestCase
             'shp_login' => 'user1',
         ];
 
-        $signatureHash = md5('demo:100:password_1:shp_id=1:shp_login=user1');
+        $signatureHash = md5('demo:100:1:password_1:shp_id=1:shp_login=user1');
 
         $returnUrl = $merchant->payment(100, 1, 'Description', null, null, 'en', $userParams, true);
 
