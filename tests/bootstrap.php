@@ -13,5 +13,3 @@ require_once(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 
 Yii::setAlias('@robokassa/tests/unit', __DIR__ . '/unit');
 Yii::setAlias('@robokassa', dirname(__DIR__));
-
-require_once(__DIR__ . '/compatibility.php');
