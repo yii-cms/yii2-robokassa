@@ -32,7 +32,7 @@ jobs:
       with:
         dev: no
         args: --profile --ignore-platform-reqs --prefer-dist --no-progress --no-suggest
-        php_version: 7.3
+        php_version: 7.1
 
     - name: Codecov
       uses: codecov/codecov-action@v1.2.1
@@ -40,8 +40,8 @@ jobs:
     - name: PHPUnit tests
       uses: php-actions/phpunit@v2
       with:
-        version: 9
-        php_version: 7.3
+        version: 6
+        php_version: 7.1
         configuration: phpunit.xml.dist
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
