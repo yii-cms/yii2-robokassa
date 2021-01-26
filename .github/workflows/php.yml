@@ -17,9 +17,9 @@ jobs:
       matrix:
         php: [ 7.1, 7.2, 7.3, 7.4 ]
         os: [ ubuntu-latest ]
-
     env:
-      XDEBUG_MODE: coverage
+      OS: ${{ matrix.os }}
+      PHP: ${{ matrix.php }}
 
     steps:
     - uses: actions/checkout@v2
@@ -44,17 +44,26 @@ jobs:
         args: --profile --ignore-platform-reqs --prefer-dist --no-progress --no-suggest
         php_version: ${{ matrix.php }}
 
-    - name: Codecov
-      uses: codecov/codecov-action@v1.2.1
-
     - name: PHPUnit tests
       uses: php-actions/phpunit@v2
+      env:
+        XDEBUG_MODE: coverage
       with:
         version: 6
         php_version: ${{ matrix.php }}
         configuration: phpunit.xml.dist
         php_extensions: xdebug
-        args: --coverage-text
+        args: --coverage-text --coverage-clover=coverage.xml
+
+    - name: Codecov
+      uses: codecov/codecov-action@v1.2.1
+      with:
+        files: ./coverage.xml
+        flags: unittests
+        env_vars: OS,PHP
+        name: codecov-umbrella
+        fail_ci_if_error: true
+        verbose: true
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
