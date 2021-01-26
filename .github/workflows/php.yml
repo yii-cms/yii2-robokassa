@@ -18,13 +18,7 @@ jobs:
         php-version: [7.3, 7.4, 8.0, 8.1 ]
         os: [ ubuntu-latest ]
         phpunit-version: [ 'latest' ]
-        include:
-          - os: 'ubuntu-latest'
-            php-version: '7.1'
-            phpunit-version: '6'
-          - os: 'ubuntu-latest'
-            php-version: '7.2'
-            phpunit-version: '8.5.13'
+
     env:
       OS: ${{ matrix.os }}
       PHP: ${{ matrix.php-version }}
