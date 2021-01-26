@@ -43,6 +43,8 @@ jobs:
         version: 6
         php_version: 7.1
         configuration: phpunit.xml.dist
+        php_extensions: xdebug
+
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
 
