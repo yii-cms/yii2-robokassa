@@ -33,7 +33,7 @@ jobs:
         php-version: "${{ matrix.php-version }}"
         coverage: "xdebug"
         ini-values: xdebug.mode=coverage
-        tools: php-cs-fixer, phpunit
+        tools: php-cs-fixer, phpunit:${{ matrix.phpunit-version }}
 
     - name: Validate composer.json and composer.lock
       run: composer validate
@@ -56,15 +56,7 @@ jobs:
         php_version: ${{ matrix.php-version }}
 
     - name: PHPUnit tests
-      uses: php-actions/phpunit@v2
-      env:
-        XDEBUG_MODE: coverage
-      with:
-        version: ${{ matrix.phpunit-version }}
-        php_version: ${{ matrix.php-version }}
-        configuration: phpunit.xml.dist
-        php_extensions: xdebug
-        args: --coverage-text --coverage-clover=coverage.xml -dxdebug.mode=coverage
+      run: vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml --configuration=phpunit.xml.dist
 
     - name: Codecov
       uses: codecov/codecov-action@v1.2.1
