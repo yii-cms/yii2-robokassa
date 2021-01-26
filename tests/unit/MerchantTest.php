@@ -106,7 +106,7 @@ class MerchantTest extends TestCase
 
         $check = $merchant->checkSignature($signature, 100, 1, 'pass1');
 
-        $this->assertInternalType('boolean', $check);
+        $this->assertIsBool($check);
 
         $this->assertTrue($check);
     }
