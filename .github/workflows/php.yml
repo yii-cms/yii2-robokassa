@@ -18,6 +18,9 @@ jobs:
         php: [ 7.1, 7.2, 7.3, 7.4 ]
         os: [ ubuntu-latest ]
 
+    env:
+      XDEBUG_MODE: coverage
+
     steps:
     - uses: actions/checkout@v2
 
