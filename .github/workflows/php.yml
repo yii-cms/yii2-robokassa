@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  tests:
     name: PHP ${{ matrix.php }} (${{ matrix.os }})
 
     runs-on: ${{ matrix.os }}
@@ -15,14 +15,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ 7.1, 7.2, 7.3, 7.4 ]
+        php-version: [ 7.1, 7.2, 7.3, 7.4, 8.0, 8.1 ]
         os: [ ubuntu-latest ]
     env:
       OS: ${{ matrix.os }}
-      PHP: ${{ matrix.php }}
+      PHP: ${{ matrix.php-version }}
 
     steps:
-    - uses: actions/checkout@v2
+    - name: "Checkout"
+      uses: actions/checkout@v2
+
+    - name: "Install PHP"
+      uses: "shivammathur/setup-php@v2"
+      with:
+        php-version: "${{ matrix.php-version }}"
+        coverage: "xdebug3"
 
     - name: Validate composer.json and composer.lock
       run: composer validate
@@ -32,17 +39,17 @@ jobs:
       uses: actions/cache@v2
       with:
         path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        key: php${{ matrix.php-version }}-os-${{ matrix.os }}-${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
         restore-keys: |
-          ${{ runner.os }}-php-
+          php${{ matrix.php-version }}-os-${{ matrix.os }}-${{ runner.os }}-php-
 
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'
       uses: php-actions/composer@v5
       with:
         dev: no
-        args: --profile --ignore-platform-reqs --prefer-dist --no-progress --no-suggest
-        php_version: ${{ matrix.php }}
+        args: --profile --prefer-dist --no-progress --no-suggest --no-interaction
+        php_version: ${{ matrix.php-version }}
 
     - name: PHPUnit tests
       uses: php-actions/phpunit@v2
@@ -50,7 +57,7 @@ jobs:
         XDEBUG_MODE: coverage
       with:
         version: 6
-        php_version: ${{ matrix.php }}
+        php_version: ${{ matrix.php-version }}
         configuration: phpunit.xml.dist
         php_extensions: xdebug
         args: --coverage-text --coverage-clover=coverage.xml
