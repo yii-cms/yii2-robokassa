@@ -29,6 +29,10 @@ jobs:
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
+      with:
+        dev: no
+        args: --profile --ignore-platform-reqs
+        php_version: 7.1
 
     - name: Codecov
       uses: codecov/codecov-action@v1.2.1
