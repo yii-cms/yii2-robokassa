@@ -30,11 +30,11 @@ jobs:
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
 
+    - name: Codecov
+      uses: codecov/codecov-action@v1.2.1
+
     - name: PHPUnit tests
-      uses: php-actions/phpunit@v9
-      with:
-        configuration: phpunit.xml.dist
-        memory_limit: 256M
+      uses: php-actions/phpunit@v6
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
