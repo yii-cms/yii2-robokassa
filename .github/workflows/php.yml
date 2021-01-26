@@ -38,10 +38,11 @@ jobs:
       uses: codecov/codecov-action@v1.2.1
 
     - name: PHPUnit tests
-      uses: php-actions/phpunit@v6
+      uses: php-actions/phpunit@v2
       with:
-        configuration: phpunit.xml.dist
+        version: 9
         php_version: 7.1
+        configuration: phpunit.xml.dist
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
 
