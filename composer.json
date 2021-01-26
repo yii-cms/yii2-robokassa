@@ -15,15 +15,9 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "php": ">=7.1",
+    "php": ">=7.3",
     "yiisoft/yii2": "~2.0.14"
   },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://asset-packagist.org"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "robokassa\\": "src/"

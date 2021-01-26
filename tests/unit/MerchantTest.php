@@ -9,10 +9,6 @@ use yii\web\Response;
 
 class MerchantTest extends TestCase
 {
-    protected function setUp()
-    {
-    }
-
     public function testRedirectUrl()
     {
         $merchant = new Merchant([
