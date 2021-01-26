@@ -62,7 +62,7 @@ jobs:
         php_version: ${{ matrix.php-version }}
         configuration: phpunit.xml.dist
         php_extensions: xdebug
-        args: --coverage-text --coverage-clover=coverage.xml -d XDEBUG_MODE=coverage
+        args: --coverage-text --coverage-clover=coverage.xml -dxdebug.mode=coverage
 
     - name: Codecov
       uses: codecov/codecov-action@v1.2.1
