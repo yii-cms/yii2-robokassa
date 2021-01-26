@@ -30,6 +30,12 @@ jobs:
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
 
+    - name: PHPUnit tests
+      uses: php-actions/phpunit@v9
+      with:
+        configuration: phpunit.xml.dist
+        memory_limit: 256M
+
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
 
