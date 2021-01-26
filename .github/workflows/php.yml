@@ -39,7 +39,9 @@ jobs:
 
     - name: PHPUnit tests
       uses: php-actions/phpunit@v6
-
+      with:
+        configuration: phpunit.xml.dist
+        php_version: 7.1
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
     # Docs: https://getcomposer.org/doc/articles/scripts.md
 
