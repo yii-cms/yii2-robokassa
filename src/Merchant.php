@@ -17,6 +17,7 @@ class Merchant extends BaseObject
     public $isTest = false;
 
     public $baseUrl = 'https://auth.robokassa.ru/Merchant/Index.aspx';
+    public $recurringUrl = 'https://auth.robokassa.ru/Merchant/Recurring';
 
     public $hashAlgo = 'md5';
 

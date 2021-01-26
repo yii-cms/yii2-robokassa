@@ -3,7 +3,7 @@
 namespace robokassa\tests\unit;
 
 use robokassa\Merchant;
-use robokassa\ResultAction;
+use robokassa\actions\ResultAction;
 use robokassa\tests\TestCase;
 use Yii;
 use yii\web\Controller;

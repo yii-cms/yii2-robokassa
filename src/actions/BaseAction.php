@@ -1,7 +1,8 @@
 <?php
 
-namespace robokassa;
+namespace robokassa\actions;
 
+use robokassa\Merchant;
 use yii\base\Action;
 use yii\base\InvalidConfigException;
 

@@ -3,7 +3,7 @@
 namespace robokassa\tests\unit;
 
 use robokassa\Merchant;
-use robokassa\SuccessAction;
+use robokassa\actions\SuccessAction;
 use robokassa\tests\TestCase;
 use Yii;
 use yii\web\Controller;
@@ -34,7 +34,7 @@ class BaseActionTest extends TestCase
         $_REQUEST['SignatureValue'] = md5('100:1:password_1');
 
         $this->expectException('yii\\base\\InvalidConfigException');
-        $this->expectExceptionMessage('"robokassa\SuccessAction::callback" should be a valid callback.');
+        $this->expectExceptionMessage('"robokassa\actions\SuccessAction::callback" should be a valid callback.');
 
         $action->run();
     }

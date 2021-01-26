@@ -1,7 +1,8 @@
 <?php
 
-namespace robokassa;
+namespace robokassa\actions;
 
+use robokassa\Merchant;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;

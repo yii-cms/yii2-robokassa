@@ -2,7 +2,7 @@
 
 namespace robokassa\tests\unit;
 
-use robokassa\FailAction;
+use robokassa\actions\FailAction;
 use robokassa\Merchant;
 use robokassa\tests\TestCase;
 use Yii;
