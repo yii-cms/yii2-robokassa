@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: [7.3, 7.4, 8.0, 8.1 ]
+        php-version: [7.3, 7.4, 8.0, 8.0.1 ]
         os: [ ubuntu-latest ]
         phpunit-version: [ 'latest' ]
 
@@ -33,7 +33,7 @@ jobs:
         php-version: "${{ matrix.php-version }}"
         coverage: "xdebug"
         ini-values: xdebug.mode=coverage
-        tools: php-cs-fixer, phpunit:${{ matrix.phpunit-version }}
+        tools: phpcs, phpmd, php-cs-fixer, phpunit:${{ matrix.phpunit-version }}
 
     - name: Validate composer.json and composer.lock
       run: composer validate
