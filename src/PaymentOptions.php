@@ -1,8 +1,6 @@
 <?php
 
-
 namespace robokassa;
-
 
 use yii\base\BaseObject;
 
@@ -128,11 +126,20 @@ class PaymentOptions extends BaseObject
      */
     public function getParams(): array
     {
-        $params = [];
+        return $this->_params;
+    }
+
+    /**
+     * @return array
+     */
+    public function getShpParams(): array
+    {
+        $sph = [];
         foreach ($this->_params as $key => $value) {
-            $params[substr($key, 3)] = $value;
+            $sph["shp_{$key}"] = $value;
         }
-        return $params;
+        ksort($sph);
+        return $sph;
     }
 
     /**
@@ -140,10 +147,6 @@ class PaymentOptions extends BaseObject
      */
     public function setParams(array $params): void
     {
-        ksort($params);
-        foreach ($params as $key => $value) {
-            $params["shp_{$key}"] = $value;
-        }
         $this->_params = $params;
     }
 }

@@ -55,6 +55,13 @@ jobs:
         args: --profile --prefer-dist --no-progress --no-suggest --no-interaction
         php_version: ${{ matrix.php-version }}
 
+
+    - name: Run phpmd
+      run: composer run-script phpmd
+
+    - name: Run phpcs
+      run: composer run-script phpcs
+
     - name: PHPUnit tests
       run: phpunit --coverage-text --coverage-clover=coverage.xml --configuration=phpunit.xml.dist
 
@@ -67,9 +74,3 @@ jobs:
         name: codecov-umbrella
         fail_ci_if_error: true
         verbose: true
-
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
-
-    # - name: Run test suite
-    #   run: composer run-script test

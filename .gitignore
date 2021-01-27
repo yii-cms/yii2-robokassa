@@ -28,6 +28,7 @@ phpunit.phar
 # local phpunit config
 /phpunit.xml
 /clover.xml
+/.phpunit.result.cache
 
 # local tests configuration
 /tests/data/config.local.php

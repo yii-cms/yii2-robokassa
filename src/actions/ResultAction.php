@@ -20,30 +20,39 @@ class ResultAction extends BaseAction
      */
     public function run()
     {
-        if (!isset($_REQUEST['OutSum'], $_REQUEST['InvId'], $_REQUEST['SignatureValue'])) {
-            throw new BadRequestHttpException;
+        $options = new ResultOptions([
+            'outSum' => $this->getParam('OutSum'),
+            'invId' => $this->getParam('InvId'),
+            'email' => $this->getParam('EMail'),
+            'fee' => $this->getParam('Fee'),
+            'signatureValue' => $this->getParam('SignatureValue'),
+            'culture' => $this->getParam('Culture'),
+            'params' => $this->getSph(),
+        ]);
+
+        if (
+            $options->outSum === null ||
+            $options->invId === null ||
+            $options->signatureValue === null
+        ) {
+            throw new BadRequestHttpException();
         }
 
         /** @var Merchant $merchant */
         $merchant = Yii::$app->get($this->merchant);
 
-        $shp = [];
-        foreach ($_REQUEST as $key => $param) {
-            if (strpos(strtolower($key), 'shp') === 0) {
-                $shp[$key] = $param;
-            }
-        }
-
-        if ($merchant->checkSignature(
-            $_REQUEST['SignatureValue'],
-            $_REQUEST['OutSum'],
-            $_REQUEST['InvId'],
-            $merchant->sMerchantPass2,
-            $shp)
+        if (
+            $merchant->checkSignature(
+                $options->signatureValue,
+                $options->outSum,
+                $options->invId,
+                $merchant->sMerchantPass2,
+                $options->params
+            )
         ) {
-            return $this->callback($merchant, $_REQUEST['InvId'], $_REQUEST['OutSum'], $shp);
+            return $this->callback($merchant, $options);
         }
 
-        throw new BadRequestHttpException;
+        throw new BadRequestHttpException();
     }
 }

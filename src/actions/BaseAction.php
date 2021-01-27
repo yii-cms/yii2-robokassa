@@ -18,18 +18,41 @@ class BaseAction extends Action
 
     /**
      * @param Merchant $merchant Merchant.
-     * @param mixed $nInvId
-     * @param mixed $nOutSum
-     * @param array $shp
+     * @param $options
      * @return mixed
      * @throws InvalidConfigException
      */
-    protected function callback($merchant, $nInvId, $nOutSum, $shp)
+    protected function callback(Merchant $merchant, $options)
     {
         if (!is_callable($this->callback)) {
             throw new InvalidConfigException('"' . get_class($this) . '::callback" should be a valid callback.');
         }
-        $response = call_user_func($this->callback, $merchant, $nInvId, $nOutSum, $shp);
-        return $response;
+        return call_user_func($this->callback, $merchant, $options);
+    }
+
+    /**
+     * @param $name
+     * @param null $defaultValue
+     * @return mixed|null
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    protected function getParam($name, $defaultValue = null)
+    {
+        return isset($_GET[$name]) ? $_GET[$name] : (isset($_POST[$name]) ? $_POST[$name] : $defaultValue);
+    }
+
+    /**
+     * @return array
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    protected function getSph()
+    {
+        $shp = [];
+        foreach ($_REQUEST as $key => $param) {
+            if (strpos(strtolower($key), 'shp_') === 0) {
+                $shp[$key] = $param;
+            }
+        }
+        return $shp;
     }
 }

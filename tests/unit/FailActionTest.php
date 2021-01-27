@@ -3,6 +3,7 @@
 namespace robokassa\tests\unit;
 
 use robokassa\actions\FailAction;
+use robokassa\actions\FailOptions;
 use robokassa\Merchant;
 use robokassa\tests\TestCase;
 use Yii;
@@ -26,18 +27,49 @@ class FailActionTest extends TestCase
         $controller = new Controller('merchant', Yii::$app);
 
         $action = new FailAction('success', $controller, [
-            'callback' => function ($merchant, $nInvId, $nOutSum, $shp) {
-                return 'SUCCESS';
+            'callback' => function ($merchant, $options) {
+                /** @var FailOptions $options */
+                return "SUCCESS:{$options->outSum}:{$options->invId}:{$options->culture}";
             }
         ]);
 
-        $_REQUEST['OutSum'] = 100;
-        $_REQUEST['InvId'] = 1;
-        $_REQUEST['SignatureValue'] = md5('100:1:password_1');
+        $_GET['OutSum'] = 100;
+        $_GET['InvId'] = 1;
+        $_GET['Culture'] = 'en';
 
         $return = $action->run();
 
-        $this->assertEquals('SUCCESS', $return);
+        $this->assertEquals("SUCCESS:100:1:en", $return);
+    }
+    public function testSuccessPost()
+    {
+        $this->mockWebApplication();
+
+        $merchant = new Merchant([
+            'sMerchantLogin' => 'demo',
+            'sMerchantPass1' => 'password_1',
+            'hashAlgo' => 'md5',
+            'isTest' => true,
+        ]);
+
+        Yii::$app->set('robokassa', $merchant);
+
+        $controller = new Controller('merchant', Yii::$app);
+
+        $action = new FailAction('success', $controller, [
+            'callback' => function ($merchant, $options) {
+                /** @var FailOptions $options */
+                return "SUCCESS:{$options->outSum}:{$options->invId}:{$options->culture}";
+            }
+        ]);
+
+        $_POST['OutSum'] = 100;
+        $_POST['InvId'] = 1;
+        $_POST['Culture'] = 'en';
+
+        $return = $action->run();
+
+        $this->assertEquals("SUCCESS:100:1:en", $return);
     }
 
     public function testBadSignatureRequestIgnored()
@@ -56,18 +88,25 @@ class FailActionTest extends TestCase
         $controller = new Controller('merchant', Yii::$app);
 
         $action = new FailAction('success', $controller, [
-            'callback' => function ($merchant, $nInvId, $nOutSum, $shp) {
-                return [$nInvId, $nOutSum, $shp];
+            'callback' => function ($merchant, $options) {
+                return $options;
             }
         ]);
 
-        $_REQUEST['OutSum'] = 100;
-        $_REQUEST['InvId'] = 1;
-        $_REQUEST['SignatureValue'] = md5('100:1:password_invalid');
+        $expectedOptions = new FailOptions([
+            'outSum' => 100,
+            'invId' => 1,
+            'culture' => 'en',
+            'params' => [],
+        ]);
+
+        $_GET['OutSum'] = 100;
+        $_GET['InvId'] = 1;
+        $_GET['Culture'] = 'en';
 
         $return = $action->run();
 
-        $this->assertEquals([1, 100, []], $return);
+        $this->assertEquals($expectedOptions, $return);
     }
 
     public function testBadRequest()
@@ -90,47 +129,5 @@ class FailActionTest extends TestCase
         $this->expectException('yii\\web\\BadRequestHttpException');
 
         $action->run();
-    }
-
-    public function testSuccessParams()
-    {
-        $this->mockWebApplication();
-
-        $controller = new Controller('merchant', Yii::$app);
-
-        $action = new FailAction('success', $controller, [
-            'callback' => function ($merchant, $nInvId, $nOutSum, $shp) {
-                return "{$nInvId}:{$nOutSum}";
-            }
-        ]);
-
-        $_REQUEST['OutSum'] = 100;
-        $_REQUEST['InvId'] = 1;
-
-        $return = $action->run();
-
-        $this->assertEquals('1:100', $return);
-    }
-
-    public function testSuccessParamsWithShp()
-    {
-        $this->mockWebApplication();
-
-        $controller = new Controller('merchant', Yii::$app);
-
-        $action = new FailAction('success', $controller, [
-            'callback' => function ($merchant, $nInvId, $nOutSum, $shp) {
-                return ["{$nInvId}:{$nOutSum}", $shp];
-            }
-        ]);
-
-        $_REQUEST['OutSum'] = 100;
-        $_REQUEST['InvId'] = 1;
-        $_REQUEST['shp1'] = 'param1';
-        $_REQUEST['shp_2'] = 'param2';
-
-        $return = $action->run();
-
-        $this->assertEquals(['1:100', ['shp1' => 'param1', 'shp_2' => 'param2']], $return);
     }
 }

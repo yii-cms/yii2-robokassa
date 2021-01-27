@@ -15,7 +15,7 @@
   ],
   "minimum-stability": "dev",
   "require": {
-    "php": ">=7.3",
+    "php": ">=7.1||8.0",
     "yiisoft/yii2": "~2.0.14"
   },
   "repositories": [
@@ -28,6 +28,11 @@
     "psr-4": {
       "robokassa\\": "src/"
     }
+  },
+  "scripts": {
+    "phpcs": "phpcs --standard=PSR12 --runtime-set ignore_warnings_on_exit 1 src",
+    "phpmd": "phpmd src ansi phpmd.xml -v",
+    "phpunit": "phpunit --coverage-text --coverage-clover=coverage.xml --configuration=phpunit.xml.dist"
   },
   "extra": {
     "branch-alias": {
