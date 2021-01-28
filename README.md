@@ -103,9 +103,9 @@ class PaymentController extends \yii\web\Controller
         }
     }
 
-	/**
-	 * @inheritdoc
-	 */
+    /**
+     * @inheritdoc
+     */
     public function actions()
     {
         return [
@@ -124,13 +124,13 @@ class PaymentController extends \yii\web\Controller
         ];
     }
 
-	/**
-	 * Переадресация пользователя при успешной оплате на SuccessURL.
+   /**
+     * Переадресация пользователя при успешной оплате на SuccessURL.
      * Переход пользователя по данному адресу означает, что оплата Вашего заказа успешно выполнена.
      * Однако для дополнительной защиты желательно, чтобы факт оплаты проверялся скриптом, исполняемым при переходе на ResultURL
      * @param \robokassa\Merchant $merchant merchant.
      * @param \robokassa\actions\SuccessOptions $options
-	 * @return mixed
+     * @return mixed
      */
     public function successCallback($merchant, $options)
     {
@@ -145,8 +145,8 @@ class PaymentController extends \yii\web\Controller
         // ...
     }
     
-	/**
-	 * Оповещение об оплате на ResultURL
+   /**
+     * Оповещение об оплате на ResultURL
      * ResultURL предназначен для получения Вашим сайтом оповещения об успешном платеже в автоматическом режиме.
      * В случае успешного проведения оплаты ROBOKASSA делает запрос на ResultURL 
      * Ваш скрипт работает правильно и повторное уведомление с нашей стороны не требуется. 
@@ -154,7 +154,7 @@ class PaymentController extends \yii\web\Controller
      * Например, для номера счёта 5 должен быть возвращён вот такой ответ: OK5.
      * @param \robokassa\Merchant $merchant merchant.
      * @param \robokassa\actions\ResultOptions $options
-	 * @return mixed
+     * @return mixed
      */
     public function resultCallback($merchant, $options)
     {
@@ -163,15 +163,15 @@ class PaymentController extends \yii\web\Controller
         return 'OK' . $options->invId;
     }
     
-	/**
-	 * Переадресация пользователя при отказе от оплаты на FailURL
+   /**
+     * Переадресация пользователя при отказе от оплаты на FailURL
      * В случае отказа от исполнения платежа Покупатель перенаправляется по данному адресу.
      * Необходимо для того, чтобы Продавец мог, например, разблокировать заказанный товар на складе.
      * Переход пользователя по данному адресу, строго говоря, не означает окончательного отказа 
      * Покупателя от оплаты, нажав кнопку «Back» в браузере он может вернуться на страницы ROBOKASSA.
      * @param \robokassa\Merchant $merchant merchant.
      * @param \robokassa\actions\FailAction $options
-	 * @return mixed
+     * @return mixed
      */
     public function failCallback($merchant, $nInvId, $nOutSum, $shp)
     {
