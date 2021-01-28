@@ -6,6 +6,7 @@ use robokassa\Merchant;
 use robokassa\PaymentOptions;
 use robokassa\tests\TestCase;
 use Yii;
+use yii\helpers\Json;
 use yii\web\Response;
 
 class MerchantTest extends TestCase
@@ -28,7 +29,7 @@ class MerchantTest extends TestCase
             'culture' => 'en',
         ]));
 
-        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&InvId=1&Desc=Description&SignatureValue={$signatureHash}&Culture=en&IsTest=1", $returnUrl);
+        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&Description=Description&SignatureValue={$signatureHash}&InvId=1&Culture=en&Encoding=utf-8&IsTest=1", $returnUrl);
 
         // disable test
         $merchant->isTest = false;
@@ -40,7 +41,7 @@ class MerchantTest extends TestCase
             'culture' => 'en',
         ]));
 
-        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&InvId=1&Desc=Description&SignatureValue={$signatureHash}&Culture=en", $returnUrl);
+        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&Description=Description&SignatureValue={$signatureHash}&InvId=1&Culture=en&Encoding=utf-8", $returnUrl);
     }
 
     public function testPaymentUrlNoInvId()
@@ -60,7 +61,52 @@ class MerchantTest extends TestCase
 
         $signatureHash = md5('demo:100:password_1');
 
-        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&Desc=Description&SignatureValue={$signatureHash}&Culture=en&IsTest=1", $returnUrl);
+        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&Description=Description&SignatureValue={$signatureHash}&Culture=en&Encoding=utf-8&IsTest=1", $returnUrl);
+    }
+
+    public function testPaymentReceipt()
+    {
+        $merchant = new Merchant([
+            'sMerchantLogin' => 'demo',
+            'sMerchantPass1' => 'password_1',
+            'hashAlgo' => 'md5',
+            'isTest' => true,
+        ]);
+
+        $receipt = [
+            'sno' => 'osn',
+            'items' => [
+                [
+                    'name' => 'Название товара 1',
+                    'quantity' => 1,
+                    'sum' => 100,
+                    'payment_method' => 'full_payment',
+                    'payment_object' => 'commodity',
+                    'tax' => 'vat10'
+                ],
+                [
+                    'name' => 'Название товара 2',
+                    'quantity' => 3,
+                    'sum' => 450,
+                    'payment_method' => 'full_prepayment',
+                    'payment_object' => 'excise',
+                    'tax' => 'vat120',
+                    'nomenclature_code' => '04620034587217'
+                ],
+            ],
+        ];
+
+        $returnUrl = $merchant->getPaymentUrl(new PaymentOptions([
+            'outSum' => 100,
+            'description' => 'Description',
+            'culture' => 'en',
+            'receipt' => $receipt,
+        ]));
+
+        $receiptEncoded = urlencode(Json::encode(($receipt)));
+        $signatureHash = md5("demo:100:{$receiptEncoded}:password_1");
+
+        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&Description=Description&SignatureValue={$signatureHash}&Culture=en&Encoding=utf-8&Receipt={$receiptEncoded}&IsTest=1", $returnUrl);
     }
 
     public function testPaymentUrlUserParams()
@@ -85,7 +131,7 @@ class MerchantTest extends TestCase
             ],
         ]));
 
-        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&InvId=1&Desc=Description&SignatureValue={$signatureHash}&Culture=en&IsTest=1&shp_login=user1&shp_user_id=1", $returnUrl);
+        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&Description=Description&SignatureValue={$signatureHash}&InvId=1&Culture=en&Encoding=utf-8&IsTest=1&shp_login=user1&shp_user_id=1", $returnUrl);
     }
 
     public function testResponseRedirect()
@@ -113,7 +159,7 @@ class MerchantTest extends TestCase
         ]));
 
         $this->assertInstanceOf(Response::class, $response);
-        $this->assertEquals('https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&InvId=1&Desc=Description&SignatureValue=8a50b8d86ed28921edfc371cff6e156f&Culture=en&IsTest=1', $response->getHeaders()->get('Location'));
+        $this->assertEquals('https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&Description=Description&SignatureValue=8a50b8d86ed28921edfc371cff6e156f&InvId=1&Culture=en&Encoding=utf-8&IsTest=1', $response->getHeaders()->get('Location'));
     }
 
     public function testSignature()

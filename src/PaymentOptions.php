@@ -3,6 +3,7 @@
 namespace robokassa;
 
 use yii\base\BaseObject;
+use yii\helpers\Json;
 
 class PaymentOptions extends BaseObject
 {
@@ -116,6 +117,11 @@ class PaymentOptions extends BaseObject
     public $userIP;
 
     /**
+     * @var array
+     */
+    public $receipt;
+
+    /**
      * @var array Дополнительные пользовательские параметры (Shp_)
      * Это такие параметры, которые ROBOKASSA никак не обрабатывает, но всегда возвращает магазину в ответных вызовах.
      */
@@ -148,5 +154,21 @@ class PaymentOptions extends BaseObject
     public function setParams(array $params): void
     {
         $this->_params = $params;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getEncodedReciept()
+    {
+        return $this->receipt ? urlencode(Json::encode(($this->receipt))) : null;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getJsonReciept()
+    {
+        return $this->receipt ? Json::encode(($this->receipt)) : null;
     }
 }

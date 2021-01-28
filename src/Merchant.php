@@ -5,6 +5,9 @@ namespace robokassa;
 use Yii;
 use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
+use yii\httpclient\Client;
 use yii\web\Response;
 
 class Merchant extends BaseObject
@@ -42,17 +45,21 @@ class Merchant extends BaseObject
         $url = $this->baseUrl;
 
         $url .= '?' . http_build_query([
-                'MrchLogin' => $this->sMerchantLogin,
-                'OutSum' => $options->outSum,
-                'InvId' => $options->invId,
-                'Desc' => $options->description,
-                'SignatureValue' => $this->generateSignature($options),
-                'IncCurrLabel' => $options->incCurrLabel,
-                'Email' => $options->email,
-                'Culture' => $options->culture,
-                'userIP' => $options->userIP,
-                'IsTest' => $this->isTest ? 1 : null,
-            ]);
+            'MrchLogin' => $this->sMerchantLogin,
+            'OutSum' => $options->outSum,
+            'Description' => $options->description,
+            'SignatureValue' => $this->generateSignature($options),
+            'IncCurrLabel' => $options->incCurrLabel,
+            'InvId' => $options->invId,
+            'Culture' => $options->culture,
+            'Encoding' => $options->encoding,
+            'Email' => $options->email,
+            'ExpirationDate' => $options->expirationDate,
+            'OutSumCurrency' => $options->outSumCurrency,
+            'UserIp' => $options->userIP,
+            'Receipt' => $options->getJsonReciept(),
+            'IsTest' => $this->isTest ? 1 : null,
+        ]);
 
         $shp = $options->getShpParams();
         if (!empty($shp) && ($query = http_build_query($shp)) !== '') {
@@ -83,13 +90,29 @@ class Merchant extends BaseObject
      */
     private function generateSignature(PaymentOptions $options)
     {
-        if ($options->invId === null) {
-            // MerchantLogin:OutSum:Пароль#1
-            $signature = "{$this->sMerchantLogin}:{$options->outSum}:{$this->sMerchantPass1}";
-        } else {
+        // MerchantLogin:OutSum:Пароль#1
+        $signature = "{$this->sMerchantLogin}:{$options->outSum}";
+
+        if ($options->invId !== null) {
             // MerchantLogin:OutSum:InvId:Пароль#1
-            $signature = "{$this->sMerchantLogin}:{$options->outSum}:{$options->invId}:{$this->sMerchantPass1}";
+            $signature .= ":{$options->invId}";
         }
+        if ($options->outSumCurrency !== null) {
+            // MerchantLogin:OutSum:InvId:OutSumCurrency:Пароль#1
+            $signature .= ":{$options->outSumCurrency}";
+        }
+
+        if ($options->userIP !== null) {
+            // MerchantLogin:OutSum:InvId:OutSumCurrency:UserIp:Пароль#1
+            $signature .= ":{$options->userIP}";
+        }
+
+        if (($receipt = $options->getEncodedReciept()) !== null) {
+            // MerchantLogin:OutSum:InvId:OutSumCurrency:UserIp:Receipt:Пароль#1
+            $signature .= ":{$receipt}";
+        }
+
+        $signature .= ":{$this->sMerchantPass1}";
 
         $shp = $options->getShpParams();
         if (!empty($shp)) {
