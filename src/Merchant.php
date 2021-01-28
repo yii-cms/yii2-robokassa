@@ -5,9 +5,6 @@ namespace robokassa;
 use Yii;
 use yii\base\BaseObject;
 use yii\base\InvalidConfigException;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Json;
-use yii\httpclient\Client;
 use yii\web\Response;
 
 class Merchant extends BaseObject

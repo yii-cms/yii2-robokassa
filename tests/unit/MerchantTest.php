@@ -20,16 +20,18 @@ class MerchantTest extends TestCase
             'isTest' => true,
         ]);
 
-        $signatureHash = md5('demo:100:1:password_1');
+        $signatureHash = md5('demo:100:1:USD:127.0.0.1:password_1');
 
         $returnUrl = $merchant->getPaymentUrl(new PaymentOptions([
             'outSum' => 100,
             'invId' => 1,
             'description' => 'Description',
             'culture' => 'en',
+            'outSumCurrency' => 'USD',
+            'userIP' => '127.0.0.1',
         ]));
 
-        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&Description=Description&SignatureValue={$signatureHash}&InvId=1&Culture=en&Encoding=utf-8&IsTest=1", $returnUrl);
+        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&Description=Description&SignatureValue={$signatureHash}&InvId=1&Culture=en&Encoding=utf-8&OutSumCurrency=USD&UserIp=127.0.0.1&IsTest=1", $returnUrl);
 
         // disable test
         $merchant->isTest = false;
@@ -39,9 +41,11 @@ class MerchantTest extends TestCase
             'invId' => 1,
             'description' => 'Description',
             'culture' => 'en',
+            'outSumCurrency' => 'USD',
+            'userIP' => '127.0.0.1',
         ]));
 
-        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&Description=Description&SignatureValue={$signatureHash}&InvId=1&Culture=en&Encoding=utf-8", $returnUrl);
+        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&Description=Description&SignatureValue={$signatureHash}&InvId=1&Culture=en&Encoding=utf-8&OutSumCurrency=USD&UserIp=127.0.0.1", $returnUrl);
     }
 
     public function testPaymentUrlNoInvId()
