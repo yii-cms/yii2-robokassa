@@ -16,8 +16,7 @@
   "minimum-stability": "dev",
   "require": {
     "php": ">=7.1||8.0",
-    "yiisoft/yii2": "~2.0.14",
-    "yiisoft/yii2-httpclient": "*"
+    "yiisoft/yii2": "~2.0.14"
   },
   "repositories": [
     {
