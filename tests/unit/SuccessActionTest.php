@@ -2,8 +2,9 @@
 
 namespace robokassa\tests\unit;
 
+use robokassa\actions\SuccessOptions;
 use robokassa\Merchant;
-use robokassa\SuccessAction;
+use robokassa\actions\SuccessAction;
 use robokassa\tests\TestCase;
 use Yii;
 use yii\web\Controller;
@@ -26,14 +27,15 @@ class SuccessActionTest extends TestCase
         $controller = new Controller('merchant', Yii::$app);
 
         $action = new SuccessAction('success', $controller, [
-            'callback' => function ($merchant, $nInvId, $nOutSum, $shp) {
+            'callback' => function ($merchant, $options) {
                 return 'SUCCESS';
             }
         ]);
 
-        $_REQUEST['OutSum'] = 100;
-        $_REQUEST['InvId'] = 1;
-        $_REQUEST['SignatureValue'] = md5('100:1:password_1');
+        $_GET['OutSum'] = 100;
+        $_GET['InvId'] = 1;
+        $_GET['SignatureValue'] = md5('100:1:password_1');
+        $_GET['Culture'] = 'en';
 
         $return = $action->run();
 
@@ -56,20 +58,30 @@ class SuccessActionTest extends TestCase
         $controller = new Controller('merchant', Yii::$app);
 
         $action = new SuccessAction('success', $controller, [
-            'callback' => function ($merchant, $nInvId, $nOutSum, $shp) {
-                return ["{$nInvId}:{$nOutSum}", $shp];
+            'callback' => function ($merchant, $options) {
+                return $options;
             }
         ]);
 
-        $_REQUEST['OutSum'] = 100;
-        $_REQUEST['InvId'] = 1;
-        $_REQUEST['SignatureValue'] = md5('100:1:password_1:shp1=param1:shp_2=param2');
-        $_REQUEST['shp1'] = 'param1';
-        $_REQUEST['shp_2'] = 'param2';
+        $_GET['OutSum'] = 100;
+        $_GET['InvId'] = 1;
+        $_GET['SignatureValue'] = md5('100:1:password_1:shp_2=param2');
+        $_GET['Culture'] = 'en';
+        $_GET['shp1'] = 'param1'; // invalid user param
+        $_GET['shp_2'] = 'param2';
+
+        // for sph params
+        $_REQUEST = $_GET;
 
         $return = $action->run();
 
-        $this->assertEquals(['1:100', ['shp1' => 'param1', 'shp_2' => 'param2']], $return);
+        $this->assertEquals(new SuccessOptions([
+            'outSum' => 100,
+            'invId' => 1,
+            'signatureValue' => md5('100:1:password_1:shp_2=param2'),
+            'culture' => 'en',
+            'params' => ['shp_2' => 'param2'],
+        ]), $return);
     }
 
     public function testBadSignatureRequest()
@@ -88,14 +100,15 @@ class SuccessActionTest extends TestCase
         $controller = new Controller('merchant', Yii::$app);
 
         $action = new SuccessAction('success', $controller, [
-            'callback' => function ($merchant, $nInvId, $nOutSum, $shp) {
+            'callback' => function ($merchant, $options) {
                 return 'SUCCESS';
             }
         ]);
 
-        $_REQUEST['OutSum'] = 100;
-        $_REQUEST['InvId'] = 1;
-        $_REQUEST['SignatureValue'] = md5('100:1:password_invalid');
+        $_GET['OutSum'] = 100;
+        $_GET['InvId'] = 1;
+        $_GET['SignatureValue'] = md5('100:1:password_invalid');
+        $_GET['Culture'] = 'en';
 
         $this->expectException('yii\\web\\BadRequestHttpException');
 

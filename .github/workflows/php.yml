@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  tests:
+    name: PHP ${{ matrix.php-version }} (${{ matrix.os }})
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [7.3, 7.4, 8.0, 8.0.1 ]
+        os: [ ubuntu-latest ]
+        phpunit-version: [ 'latest' ]
+
+    env:
+      OS: ${{ matrix.os }}
+      PHP: ${{ matrix.php-version }}
+
+    steps:
+    - name: "Checkout"
+      uses: actions/checkout@v2
+
+    - name: "Setup PHP"
+      uses: "shivammathur/setup-php@v2"
+      with:
+        php-version: "${{ matrix.php-version }}"
+        coverage: "xdebug"
+        ini-values: xdebug.mode=coverage
+        tools: phpcs, phpmd, php-cs-fixer, phpunit:${{ matrix.phpunit-version }}
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v2
+      with:
+        path: vendor
+        key: php${{ matrix.php-version }}-os-${{ matrix.os }}-${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          php${{ matrix.php-version }}-os-${{ matrix.os }}-${{ runner.os }}-php-
+
+    - name: Install dependencies
+      if: steps.composer-cache.outputs.cache-hit != 'true'
+      uses: php-actions/composer@v5
+      with:
+        dev: no
+        args: --profile --prefer-dist --no-progress --no-suggest --no-interaction
+        php_version: ${{ matrix.php-version }}
+
+
+    - name: Run phpmd
+      run: composer run-script phpmd
+
+    - name: Run phpcs
+      run: composer run-script phpcs
+
+    - name: PHPUnit tests
+      run: phpunit --coverage-text --coverage-clover=coverage.xml --configuration=phpunit.xml.dist
+
+    - name: Codecov
+      uses: codecov/codecov-action@v1.2.1
+      with:
+        files: ./coverage.xml
+        flags: unittests
+        env_vars: OS,PHP
+        name: codecov-umbrella
+        fail_ci_if_error: true
+        verbose: true
