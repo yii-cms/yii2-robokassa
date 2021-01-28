@@ -50,6 +50,7 @@ class Merchant extends BaseObject
                 'IncCurrLabel' => $options->incCurrLabel,
                 'Email' => $options->email,
                 'Culture' => $options->culture,
+                'userIP' => $options->userIP,
                 'IsTest' => $this->isTest ? 1 : null,
             ]);
 
