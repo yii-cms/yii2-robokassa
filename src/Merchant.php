@@ -17,7 +17,7 @@ class Merchant extends BaseObject
     public $isTest = false;
 
     public $baseUrl = 'https://auth.robokassa.ru/Merchant/Index.aspx';
-    public $recurringUrl = 'https://auth.robokassa.ru/Merchant/Recurring';
+    //public $recurringUrl = 'https://auth.robokassa.ru/Merchant/Recurring';
 
     public $hashAlgo = 'md5';
 
@@ -41,27 +41,7 @@ class Merchant extends BaseObject
     {
         $url = $this->baseUrl;
 
-        $url .= '?' . http_build_query([
-            'MrchLogin' => $this->sMerchantLogin,
-            'OutSum' => $options->outSum,
-            'Description' => $options->description,
-            'SignatureValue' => $this->generateSignature($options),
-            'IncCurrLabel' => $options->incCurrLabel,
-            'InvId' => $options->invId,
-            'Culture' => $options->culture,
-            'Encoding' => $options->encoding,
-            'Email' => $options->email,
-            'ExpirationDate' => $options->expirationDate,
-            'OutSumCurrency' => $options->outSumCurrency,
-            'UserIp' => $options->userIP,
-            'Receipt' => $options->getJsonReciept(),
-            'IsTest' => $this->isTest ? 1 : null,
-        ]);
-
-        $shp = $options->getShpParams();
-        if (!empty($shp) && ($query = http_build_query($shp)) !== '') {
-            $url .= '&' . $query;
-        }
+        $url .= '?' . http_build_query(PaymentOptions::paymentParams($this, $options));
 
         return $url;
     }
@@ -85,7 +65,7 @@ class Merchant extends BaseObject
      * @param PaymentOptions $options
      * @return string
      */
-    private function generateSignature(PaymentOptions $options)
+    public function generateSignature(PaymentOptions $options)
     {
         // MerchantLogin:OutSum:Пароль#1
         $signature = "{$this->sMerchantLogin}:{$options->outSum}";
