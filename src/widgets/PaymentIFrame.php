@@ -17,7 +17,7 @@ class PaymentIFrame extends Widget
     public $merchant;
 
     /**
-     * @var PaymentOptions
+     * @var PaymentOptions|array
      */
     public $paymentOptions;
 
@@ -33,6 +33,10 @@ class PaymentIFrame extends Widget
         }
         if (empty($this->paymentOptions)) {
             throw new InvalidConfigException('"paymentOptions" must be set.');
+        }
+
+        if (is_array($this->paymentOptions)) {
+            $this->paymentOptions = new PaymentOptions($this->paymentOptions);
         }
     }
 

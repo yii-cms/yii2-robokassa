@@ -181,7 +181,7 @@ class PaymentOptions extends BaseObject
     public static function paymentParams($merchant, $options)
     {
         return ArrayHelper::merge([
-            'MrchLogin' => $merchant->sMerchantLogin,
+            'MrchLogin' => $merchant->storeId,
             'OutSum' => $options->outSum,
             'Description' => $options->description,
             'SignatureValue' => $merchant->generateSignature($options),

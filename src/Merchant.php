@@ -9,10 +9,13 @@ use yii\web\Response;
 
 class Merchant extends BaseObject
 {
-    public $sMerchantLogin;
+    /**
+     * @var string Идентификатор магазина
+     */
+    public $storeId;
 
-    public $sMerchantPass1;
-    public $sMerchantPass2;
+    public $password1;
+    public $password2;
 
     public $isTest = false;
 
@@ -68,7 +71,7 @@ class Merchant extends BaseObject
     public function generateSignature(PaymentOptions $options)
     {
         // MerchantLogin:OutSum:Пароль#1
-        $signature = "{$this->sMerchantLogin}:{$options->outSum}";
+        $signature = "{$this->storeId}:{$options->outSum}";
 
         if ($options->invId !== null) {
             // MerchantLogin:OutSum:InvId:Пароль#1
@@ -89,7 +92,7 @@ class Merchant extends BaseObject
             $signature .= ":{$receipt}";
         }
 
-        $signature .= ":{$this->sMerchantPass1}";
+        $signature .= ":{$this->password1}";
 
         $shp = $options->getShpParams();
         if (!empty($shp)) {

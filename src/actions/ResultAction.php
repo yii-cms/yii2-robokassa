@@ -46,7 +46,7 @@ class ResultAction extends BaseAction
                 $options->signatureValue,
                 $options->outSum,
                 $options->invId,
-                $merchant->sMerchantPass2,
+                $merchant->password2,
                 $options->params
             )
         ) {
