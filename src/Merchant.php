@@ -25,7 +25,7 @@ class Merchant extends BaseObject
     public $hashAlgo = 'md5';
 
     /**
-     * @param PaymentOptions $options
+     * @param PaymentOptions|array $options
      * @return \yii\console\Response|Response
      * @throws InvalidConfigException
      */
@@ -37,11 +37,15 @@ class Merchant extends BaseObject
     }
 
     /**
-     * @param PaymentOptions $options
+     * @param PaymentOptions|array $options
      * @return string
      */
     public function getPaymentUrl(PaymentOptions $options)
     {
+        if (is_array($options)) {
+            $options = new PaymentOptions($options);
+        }
+
         $url = $this->baseUrl;
 
         $url .= '?' . http_build_query(PaymentOptions::paymentParams($this, $options));
