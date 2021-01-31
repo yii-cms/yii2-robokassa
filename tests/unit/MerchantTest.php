@@ -14,8 +14,8 @@ class MerchantTest extends TestCase
     public function testPaymentUrl()
     {
         $merchant = new Merchant([
-            'sMerchantLogin' => 'demo',
-            'sMerchantPass1' => 'password_1',
+            'storeId' => 'demo',
+            'password1' => 'password_1',
             'hashAlgo' => 'md5',
             'isTest' => true,
         ]);
@@ -51,8 +51,8 @@ class MerchantTest extends TestCase
     public function testPaymentUrlNoInvId()
     {
         $merchant = new Merchant([
-            'sMerchantLogin' => 'demo',
-            'sMerchantPass1' => 'password_1',
+            'storeId' => 'demo',
+            'password1' => 'password_1',
             'hashAlgo' => 'md5',
             'isTest' => true,
         ]);
@@ -71,8 +71,8 @@ class MerchantTest extends TestCase
     public function testPaymentReceipt()
     {
         $merchant = new Merchant([
-            'sMerchantLogin' => 'demo',
-            'sMerchantPass1' => 'password_1',
+            'storeId' => 'demo',
+            'password1' => 'password_1',
             'hashAlgo' => 'md5',
             'isTest' => true,
         ]);
@@ -116,8 +116,8 @@ class MerchantTest extends TestCase
     public function testPaymentUrlUserParams()
     {
         $merchant = new Merchant([
-            'sMerchantLogin' => 'demo',
-            'sMerchantPass1' => 'password_1',
+            'storeId' => 'demo',
+            'password1' => 'password_1',
             'hashAlgo' => 'md5',
             'isTest' => true,
         ]);
@@ -143,8 +143,8 @@ class MerchantTest extends TestCase
         $this->mockWebApplication();
 
         $merchant = new Merchant([
-            'sMerchantLogin' => 'demo',
-            'sMerchantPass1' => 'password_1',
+            'storeId' => 'demo',
+            'password1' => 'password_1',
             'hashAlgo' => 'md5',
             'isTest' => true,
         ]);
@@ -169,8 +169,8 @@ class MerchantTest extends TestCase
     public function testSignature()
     {
         $merchant = new Merchant([
-            'sMerchantLogin' => 'demo',
-            'sMerchantPass1' => 'password_1',
+            'storeId' => 'demo',
+            'password1' => 'password_1',
             'hashAlgo' => 'md5',
             'isTest' => true,
         ]);
@@ -187,8 +187,8 @@ class MerchantTest extends TestCase
     public function testSignatureUserParams()
     {
         $merchant = new Merchant([
-            'sMerchantLogin' => 'demo',
-            'sMerchantPass1' => 'password_1',
+            'storeId' => 'demo',
+            'password1' => 'password_1',
             'hashAlgo' => 'md5',
             'isTest' => true,
         ]);
@@ -204,8 +204,8 @@ class MerchantTest extends TestCase
     public function testSignatureInvalidSortUserParams()
     {
         $merchant = new Merchant([
-            'sMerchantLogin' => 'demo',
-            'sMerchantPass1' => 'password_1',
+            'storeId' => 'demo',
+            'password1' => 'password_1',
             'hashAlgo' => 'md5',
             'isTest' => true,
         ]);
@@ -221,8 +221,8 @@ class MerchantTest extends TestCase
     public function testSignatureAlgo()
     {
         $merchant = new Merchant([
-            'sMerchantLogin' => 'demo',
-            'sMerchantPass1' => 'password_1',
+            'storeId' => 'demo',
+            'password1' => 'password_1',
             'hashAlgo' => 'sha256', // <=== 'sha256'
             'isTest' => true,
         ]);

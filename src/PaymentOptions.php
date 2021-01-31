@@ -3,6 +3,7 @@
 namespace robokassa;
 
 use yii\base\BaseObject;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
 class PaymentOptions extends BaseObject
@@ -170,5 +171,30 @@ class PaymentOptions extends BaseObject
     public function getJsonReciept()
     {
         return $this->receipt ? Json::encode(($this->receipt)) : null;
+    }
+
+    /**
+     * @param Merchant $merchant
+     * @param PaymentOptions $options
+     * @return array
+     */
+    public static function paymentParams($merchant, $options)
+    {
+        return ArrayHelper::merge([
+            'MrchLogin' => $merchant->storeId,
+            'OutSum' => $options->outSum,
+            'Description' => $options->description,
+            'SignatureValue' => $merchant->generateSignature($options),
+            'IncCurrLabel' => $options->incCurrLabel,
+            'InvId' => $options->invId,
+            'Culture' => $options->culture,
+            'Encoding' => $options->encoding,
+            'Email' => $options->email,
+            'ExpirationDate' => $options->expirationDate,
+            'OutSumCurrency' => $options->outSumCurrency,
+            'UserIp' => $options->userIP,
+            'Receipt' => $options->getJsonReciept(),
+            'IsTest' => $merchant->isTest ? 1 : null,
+        ], $options->getShpParams());
     }
 }

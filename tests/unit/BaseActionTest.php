@@ -15,8 +15,8 @@ class BaseActionTest extends TestCase
         $this->mockWebApplication();
 
         $merchant = new Merchant([
-            'sMerchantLogin' => 'demo',
-            'sMerchantPass1' => 'password_1',
+            'storeId' => 'demo',
+            'password1' => 'password_1',
             'hashAlgo' => 'md5',
             'isTest' => true,
         ]);

@@ -44,7 +44,7 @@ class SuccessAction extends BaseAction
                 $options->signatureValue,
                 $options->outSum,
                 $options->invId,
-                $merchant->sMerchantPass1,
+                $merchant->password1,
                 $options->params
             )
         ) {

@@ -22,9 +22,9 @@ composer require yii-cms/yii2-robokassa
         'robokassa' => [
             'class' => '\robokassa\Merchant',
             'baseUrl' => 'https://auth.robokassa.ru/Merchant/Index.aspx',
-            'sMerchantLogin' => '',
-            'sMerchantPass1' => '',
-            'sMerchantPass2' => '',
+            'storeId' => '',
+            'password1' => '',
+            'password2' => '',
             'isTest' => !YII_ENV_PROD,
         ],
         // ...

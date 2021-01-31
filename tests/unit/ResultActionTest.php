@@ -16,9 +16,9 @@ class ResultActionTest extends TestCase
         $this->mockWebApplication();
 
         $merchant = new Merchant([
-            'sMerchantLogin' => 'demo',
-            'sMerchantPass1' => 'password_1',
-            'sMerchantPass2' => 'password_2',
+            'storeId' => 'demo',
+            'password1' => 'password_1',
+            'password2' => 'password_2',
             'hashAlgo' => 'md5',
             'isTest' => true,
         ]);
@@ -35,7 +35,7 @@ class ResultActionTest extends TestCase
 
         $_GET['OutSum'] = 100;
         $_GET['InvId'] = 1;
-        $_GET['SignatureValue'] = md5('100:1:password_2'); // using sMerchantPass2
+        $_GET['SignatureValue'] = md5('100:1:password_2'); // using password2
 
         $return = $action->run();
 
@@ -47,9 +47,9 @@ class ResultActionTest extends TestCase
         $this->mockWebApplication();
 
         $merchant = new Merchant([
-            'sMerchantLogin' => 'demo',
-            'sMerchantPass1' => 'password_1',
-            'sMerchantPass2' => 'password_2',
+            'storeId' => 'demo',
+            'password1' => 'password_1',
+            'password2' => 'password_2',
             'hashAlgo' => 'md5',
             'isTest' => true,
         ]);
@@ -66,7 +66,7 @@ class ResultActionTest extends TestCase
 
         $_GET['OutSum'] = 100;
         $_GET['InvId'] = 1;
-        $_GET['SignatureValue'] = md5('100:1:password_2:shp_2=param2'); // using sMerchantPass2
+        $_GET['SignatureValue'] = md5('100:1:password_2:shp_2=param2'); // using password2
         $_GET['shp1'] = 'param1';
         $_GET['shp_2'] = 'param2';
         // sph
@@ -90,8 +90,8 @@ class ResultActionTest extends TestCase
         $this->mockWebApplication();
 
         $merchant = new Merchant([
-            'sMerchantLogin' => 'demo',
-            'sMerchantPass1' => 'password_1',
+            'storeId' => 'demo',
+            'password1' => 'password_1',
             'hashAlgo' => 'md5',
             'isTest' => true,
         ]);

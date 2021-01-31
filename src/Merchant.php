@@ -9,20 +9,23 @@ use yii\web\Response;
 
 class Merchant extends BaseObject
 {
-    public $sMerchantLogin;
+    /**
+     * @var string Идентификатор магазина
+     */
+    public $storeId;
 
-    public $sMerchantPass1;
-    public $sMerchantPass2;
+    public $password1;
+    public $password2;
 
     public $isTest = false;
 
     public $baseUrl = 'https://auth.robokassa.ru/Merchant/Index.aspx';
-    public $recurringUrl = 'https://auth.robokassa.ru/Merchant/Recurring';
+    //public $recurringUrl = 'https://auth.robokassa.ru/Merchant/Recurring';
 
     public $hashAlgo = 'md5';
 
     /**
-     * @param PaymentOptions $options
+     * @param PaymentOptions|array $options
      * @return \yii\console\Response|Response
      * @throws InvalidConfigException
      */
@@ -34,34 +37,18 @@ class Merchant extends BaseObject
     }
 
     /**
-     * @param PaymentOptions $options
+     * @param PaymentOptions|array $options
      * @return string
      */
     public function getPaymentUrl(PaymentOptions $options)
     {
+        if (is_array($options)) {
+            $options = new PaymentOptions($options);
+        }
+
         $url = $this->baseUrl;
 
-        $url .= '?' . http_build_query([
-            'MrchLogin' => $this->sMerchantLogin,
-            'OutSum' => $options->outSum,
-            'Description' => $options->description,
-            'SignatureValue' => $this->generateSignature($options),
-            'IncCurrLabel' => $options->incCurrLabel,
-            'InvId' => $options->invId,
-            'Culture' => $options->culture,
-            'Encoding' => $options->encoding,
-            'Email' => $options->email,
-            'ExpirationDate' => $options->expirationDate,
-            'OutSumCurrency' => $options->outSumCurrency,
-            'UserIp' => $options->userIP,
-            'Receipt' => $options->getJsonReciept(),
-            'IsTest' => $this->isTest ? 1 : null,
-        ]);
-
-        $shp = $options->getShpParams();
-        if (!empty($shp) && ($query = http_build_query($shp)) !== '') {
-            $url .= '&' . $query;
-        }
+        $url .= '?' . http_build_query(PaymentOptions::paymentParams($this, $options));
 
         return $url;
     }
@@ -85,10 +72,10 @@ class Merchant extends BaseObject
      * @param PaymentOptions $options
      * @return string
      */
-    private function generateSignature(PaymentOptions $options)
+    public function generateSignature(PaymentOptions $options)
     {
         // MerchantLogin:OutSum:Пароль#1
-        $signature = "{$this->sMerchantLogin}:{$options->outSum}";
+        $signature = "{$this->storeId}:{$options->outSum}";
 
         if ($options->invId !== null) {
             // MerchantLogin:OutSum:InvId:Пароль#1
@@ -109,7 +96,7 @@ class Merchant extends BaseObject
             $signature .= ":{$receipt}";
         }
 
-        $signature .= ":{$this->sMerchantPass1}";
+        $signature .= ":{$this->password1}";
 
         $shp = $options->getShpParams();
         if (!empty($shp)) {
