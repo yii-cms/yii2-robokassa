@@ -8,13 +8,13 @@ yii2-robokassa
 [![codecov](https://codecov.io/gh/yii-cms/yii2-robokassa/branch/master/graph/badge.svg)](https://codecov.io/gh/yii-cms/yii2-robokassa)
 
 
-## Install via Composer
+## Установка с помощью Composer
 
 ~~~
-composer require yii-cms/yii2-robokassa
+composer require yii-cms/yii2-robokassa:2.*
 ~~~
 
-## Configuration
+## Подключение компонента
 
 ```php
 [
@@ -195,4 +195,77 @@ class PaymentController extends \yii\web\Controller
         return $model;
     }
 }
+```
+
+### Пример работы для фискализации
+
+*Для фискализации `receipt` лучше передавать **POST** запросом, 
+в **GET** запрос данные могут не поместиться*
+
+**PaymentIFrame::widget()** - виджет для передачи формы через **IFrame** ROBOKASSA
+
+```php
+class PaymentController extends \yii\web\Controller
+{
+    public function actionInvoice()
+    {
+        $model = new Invoice();
+        $model->status = Invoice::STATUS_PENDING;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            /** @var \robokassa\Merchant $merchant */
+            $merchant = Yii::$app->get('merchant');
+            return $this->renderContent(PaymentIFrame::widget([
+                'merchant' => $merchant,
+                'paymentOptions' => new PaymentOptions([
+                    'outSum' => $model->sum,
+                    'invId' => $model->id,
+                    'description' => 'Description',
+                    'culture' => 'en',
+                    'receipt' => [
+                        'sno' => 'osn',
+                        'items' => [
+                            [
+                                'name' => 'Название товара 1',
+                                'quantity' => 1,
+                                'sum' => 100,
+                                'payment_method' => 'full_payment',
+                                'payment_object' => 'commodity',
+                                'tax' => 'vat10'
+                            ],
+                            [
+                                'name' => 'Название товара 2',
+                                'quantity' => 3,
+                                'sum' => 450,
+                                'payment_method' => 'full_prepayment',
+                                'payment_object' => 'excise',
+                                'tax' => 'vat120',
+                                'nomenclature_code' => '04620034587217'
+                            ],
+                        ],
+                    ],
+                ]),
+            ]));
+        }
+
+        return $this->render('invoice', [
+            'merchant' => Yii::$app->get('merchant'),
+            'model' => $model,
+        ]);
+    }
+}
+```
+
+Представление `invoice.php`
+
+```php
+<?php
+/* @var $this yii\web\View */
+/* @var $merchant \robokassa\Merchant */
+/* @var $model \app\models\Invoice */
+?>
+<?php $form = ActiveForm::begin(); ?>
+<?= $form->field($model, 'sum')->textInput() ?>
+<?= Html::submitButton('Pay', ['class' => 'btn btn-success']) ?>
+<?php ActiveForm::end(); ?>
 ```
