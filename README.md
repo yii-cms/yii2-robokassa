@@ -53,6 +53,17 @@ composer require yii-cms/yii2-robokassa:2.*
 \robokassa\Merchant::getPaymentUrl($options);
 ```
 
+```php
+/**
+ * Отправляет SMS через ROBOKASSA
+ * 
+ * @param string $phone строка, содержащая номер телефона в международном формате без символа «+» (79051234567)
+ * @param string $message строка в кодировке UTF-8 длиной до 128 символов, содержащая текст отправляемого SMS.
+ * @return \yii\httpclient\Response
+ */
+\robokassa\Merchant::sendSMS($phone, $message);
+```
+
 ## Примеры
 
 ### Пример работы с компонентом

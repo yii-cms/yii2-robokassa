@@ -4,7 +4,9 @@ namespace robokassa;
 
 use Yii;
 use yii\base\BaseObject;
+use yii\base\Exception;
 use yii\base\InvalidConfigException;
+use yii\httpclient\Client;
 use yii\web\Response;
 
 class Merchant extends BaseObject
@@ -20,7 +22,10 @@ class Merchant extends BaseObject
     public $isTest = false;
 
     public $baseUrl = 'https://auth.robokassa.ru/Merchant/Index.aspx';
-    //public $recurringUrl = 'https://auth.robokassa.ru/Merchant/Recurring';
+    public $recurringUrl = 'https://auth.robokassa.ru/Merchant/Recurring';
+    public $receiptAttachUrl = 'https://ws.roboxchange.com/RoboFiscal/Receipt/Attach';
+    public $receiptStatusUrl = 'https://ws.roboxchange.com/RoboFiscal/Receipt/Status';
+    public $smsUrl = 'https://services.robokassa.ru/SMS/';
 
     public $hashAlgo = 'md5';
 
@@ -132,5 +137,28 @@ class Merchant extends BaseObject
     protected function encryptSignature($signature)
     {
         return hash($this->hashAlgo, $signature);
+    }
+
+    /**
+     * Send SMS
+     *
+     * @param string $phone строка, содержащая номер телефона в международном формате без символа «+» (79051234567)
+     * @param string $message строка в кодировке UTF-8 длиной до 128 символов, содержащая текст отправляемого SMS.
+     * @return \yii\httpclient\Response
+     * @throws Exception
+     */
+    public function sendSMS($phone, $message)
+    {
+        $phone = preg_replace('/\D+/', '', $phone);
+        if (mb_strlen($message) > 128) {
+            throw new Exception('`$message` too long');
+        }
+        $signature = $this->encryptSignature("{$this->storeId}:{$phone}:{$message}:$this->password1");
+
+        return (new Client())->get($this->smsUrl, [
+            'login' => $this->storeId,
+            'phone' => $phone,
+            'message' => $message,
+            'signature' => $signature])->send();
     }
 }
