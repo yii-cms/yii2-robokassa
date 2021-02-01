@@ -160,14 +160,6 @@ class PaymentOptions extends BaseObject
     /**
      * @return string|null
      */
-    public function getEncodedReciept()
-    {
-        return $this->receipt ? urlencode(Json::encode(($this->receipt))) : null;
-    }
-
-    /**
-     * @return string|null
-     */
     public function getJsonReciept()
     {
         return $this->receipt ? Json::encode(($this->receipt)) : null;

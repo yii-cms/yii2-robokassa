@@ -107,10 +107,11 @@ class MerchantTest extends TestCase
             'receipt' => $receipt,
         ]));
 
-        $receiptEncoded = urlencode(Json::encode(($receipt)));
+        $receiptEncoded = Json::encode(($receipt));
         $signatureHash = md5("demo:100:{$receiptEncoded}:password_1");
 
-        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&Description=Description&SignatureValue={$signatureHash}&Culture=en&Encoding=utf-8&Receipt={$receiptEncoded}&IsTest=1", $returnUrl);
+        $receiptUrlEncoded = urlencode($receiptEncoded);
+        $this->assertEquals("https://auth.robokassa.ru/Merchant/Index.aspx?MrchLogin=demo&OutSum=100&Description=Description&SignatureValue={$signatureHash}&Culture=en&Encoding=utf-8&Receipt={$receiptUrlEncoded}&IsTest=1", $returnUrl);
     }
 
     public function testPaymentUrlUserParams()
