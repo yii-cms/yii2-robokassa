@@ -11,7 +11,7 @@ yii2-robokassa
 ## Установка с помощью Composer
 
 ~~~
-composer require yii-cms/yii2-robokassa:2.*
+composer require yii-cms/yii2-robokassa:dev-master*
 ~~~
 
 ## Подключение компонента
