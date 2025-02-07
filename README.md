@@ -1,14 +1,14 @@
 yii2-robokassa
 ==============
 
-[![Latest Stable Version](http://poser.pugx.org/yii-cms/yii2-robokassa/v)](https://packagist.org/packages/yii-cms/yii2-robokassa)
+[![Latest Stable Version](https://poser.pugx.org/yii-cms/yii2-robokassa/v)](https://packagist.org/packages/yii-cms/yii2-robokassa)
 [![Build Status](https://travis-ci.org/yii-cms/yii2-robokassa.svg?branch=master)](https://travis-ci.org/yii-cms/yii2-robokassa)
 [![Coverage Status](https://coveralls.io/repos/github/yii-cms/yii2-robokassa/badge.svg)](https://coveralls.io/github/yii-cms/yii2-robokassa)
 [![codecov](https://codecov.io/gh/yii-cms/yii2-robokassa/branch/master/graph/badge.svg)](https://codecov.io/gh/yii-cms/yii2-robokassa)
 
-[![Total Downloads](http://poser.pugx.org/yii-cms/yii2-robokassa/downloads)](https://packagist.org/packages/yii-cms/yii2-robokassa)
-[![Monthly Downloads](http://poser.pugx.org/yii-cms/yii2-robokassa/d/monthly)](https://packagist.org/packages/yii-cms/yii2-robokassa)
-[![Daily Downloads](http://poser.pugx.org/yii-cms/yii2-robokassa/d/daily)](https://packagist.org/packages/yii-cms/yii2-robokassa)
+[![Total Downloads](https://poser.pugx.org/yii-cms/yii2-robokassa/downloads)](https://packagist.org/packages/yii-cms/yii2-robokassa)
+[![Monthly Downloads](https://poser.pugx.org/yii-cms/yii2-robokassa/d/monthly)](https://packagist.org/packages/yii-cms/yii2-robokassa)
+[![Daily Downloads](https://poser.pugx.org/yii-cms/yii2-robokassa/d/daily)](https://packagist.org/packages/yii-cms/yii2-robokassa)
 
 
 ## Установка с помощью Composer
